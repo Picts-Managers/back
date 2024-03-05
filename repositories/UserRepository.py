@@ -15,9 +15,10 @@ class __UserRepository:
             if user is not None
         ]
 
-
     def insertUser(self, new_user: User):
-        return self.collection.insert_one(new_user.model_dump())
+        result = self.collection.insert_one(new_user.model_dump())
+        inserted_user = self.collection.find_one({"_id": result.inserted_id})
+        return User(**inserted_user) if inserted_user else None
 
     def updateUser(self, user_id: ObjectId, new_user: User):
         return self.collection.update_one(
