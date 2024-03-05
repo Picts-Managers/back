@@ -21,9 +21,11 @@ class __UserRepository:
         return User(**inserted_user) if inserted_user else None
 
     def updateUser(self, user_id: ObjectId, new_user: User):
-        return self.collection.update_one(
+        self.collection.update_one(
             {"_id": user_id}, {"$set": new_user.model_dump()}
         )
+        updated_user = self.collection.find_one({"_id": user_id})
+        return User(**updated_user) if updated_user else None
 
     def deleteUser(self, user_id: ObjectId):
         return self.collection.delete_one({"_id": user_id})

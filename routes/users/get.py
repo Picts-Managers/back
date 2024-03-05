@@ -1,5 +1,3 @@
-import json
-
 from bson import ObjectId
 
 from repositories import user_repository
