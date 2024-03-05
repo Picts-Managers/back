@@ -1,5 +1,0 @@
-[2024-03-05 15:51:22] [INFO    ] router_init: Initializing Routes:
-[2024-03-05 15:51:22] [INFO    ] router_init:   GET /albums/<eza>/<test>
-[2024-03-05 15:51:22] [INFO    ] router_init:   GET /hello/<test>
-[2024-03-05 15:51:22] [INFO    ] router_init:   GET /
-[2024-03-05 15:51:22] [INFO    ] router_init:   GET /test/
