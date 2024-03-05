@@ -1,0 +1,23 @@
+name: Build and Deploy
+on:
+    push:
+        branches:
+            - main
+            - dev
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
+        steps:
+            - name: Connect to Server
+              uses: appleboy/ssh-action@master
+              with:
+                  host: ${{ secrets.HOST }}
+                  username: ${{ secrets.USERNAME }}
+                  key: ${{ secrets.SSH_KEY }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      cd ${{ secrets.APP_PATH }}
+                      git pull
+                      docker compose up --build -d
