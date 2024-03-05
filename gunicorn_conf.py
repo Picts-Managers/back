@@ -1,5 +1,3 @@
 bind = "0.0.0.0:3000"
 worker_class = "sync"
 loglevel = "info"
-accesslog = "/app/logs/gunicorn/access_log_yourapp"
-errorlog = "/app/logs/gunicorn/access_log_yourapp"

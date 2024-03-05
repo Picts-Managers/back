@@ -1,7 +1,14 @@
 from utils import loggingConfig
-from routes import app
+import logging
 
+loggingConfig.setupLogging()
+
+
+import routes
+
+app = routes.app
 if __name__ == "__main__":
-    loggingConfig.setupLogging()
-
     app.run()
+else:
+    __logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers = __logger.handlers
