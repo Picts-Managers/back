@@ -1,10 +1,11 @@
-import logging
+import os
 from utils import loggingConfig
-
+import dotenv
 
 if __name__ == "__main__":
-
     loggingConfig.setupLogging()
-    import routes
+    # import routes
+    from routes import app
 
-    routes.app.run(debug=True)
+    dotenv.load_dotenv()
+    app.run(debug=os.getenv("ENV") != "production")
