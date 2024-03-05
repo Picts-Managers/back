@@ -22,6 +22,6 @@ def index():
     # sort by GET, POST, PUT, PATCH, DELETE and by route length
     routes = sorted(
         routes,
-        key=lambda x: (x["method"], x["route"]),
+        key=lambda x: (x["route"], x["method"]),
     )
     return routes
