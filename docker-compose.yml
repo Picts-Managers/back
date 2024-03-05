@@ -10,7 +10,5 @@ services:
 
         env_file:
             - .env
-        environment:
-            - ENV=production
         volumes:
             - ./logs:/app/logs
