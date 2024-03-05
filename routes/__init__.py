@@ -1,10 +1,10 @@
 import importlib
 import os
-from flask import Flask
 import inspect
 import logging
 
-app = Flask(__name__)
+from utils import app
+
 
 __logger = logging.getLogger("router_init")
 
@@ -23,7 +23,7 @@ for root, folders, files in os.walk("./routes", topdown=False):
                     __logger.info(f"  {file[:-3].upper()} {route}")
                     app.add_url_rule(
                         route,
-                        route,
+                        file[:-3] + route,
                         view_func=obj,
                         methods=[file[:-3].upper()],
                     )

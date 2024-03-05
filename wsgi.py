@@ -5,8 +5,8 @@ loggingConfig.setupLogging()
 
 
 import routes
+from utils import app
 
-app = routes.app
 if __name__ == "__main__":
     app.run()
 else:
