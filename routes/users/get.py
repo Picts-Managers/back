@@ -11,4 +11,4 @@ def index(user_id: str):
     if not len(user) or len(user) > 1:
         return "error"
     user = user[0]
-    return str(user.model_dump())
+    return user.model_dump()
