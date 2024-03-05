@@ -1,3 +1,5 @@
 pymongo
 pydantic
 Flask
+python-dotenv
+gunicorn
