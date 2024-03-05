@@ -1,4 +1,5 @@
 import importlib
+from utils import MongoJSONProvider
 import os
 from flask import Flask
 import inspect
@@ -27,3 +28,7 @@ for root, folders, files in os.walk("./routes", topdown=False):
                         view_func=obj,
                         methods=[file[:-3].upper()],
                     )
+
+__logger.info("Routes Initialized")
+
+app.json = MongoJSONProvider(app)
