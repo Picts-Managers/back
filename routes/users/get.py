@@ -10,7 +10,5 @@ def index(user_id: str):
     user = user_repository.getUser(_user_id)
     if not len(user) or len(user) > 1:
         return "error"
-    else:
-        user = user[0]
-        print(user.model_dump())
-    return "user"
+    user = user[0]
+    return str(user.model_dump())
