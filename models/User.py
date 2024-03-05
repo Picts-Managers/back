@@ -13,4 +13,5 @@ class User(BaseModel):
     token: str = None
 
     def model_dump(self):
-        return super().model_dump(by_alias=True, exclude_unset=True)
+        print(super())
+        return super().model_dump_json(by_alias=True, exclude_unset=True)
