@@ -1,7 +1,8 @@
 import os
-from utils import app
+from utils import app, route
 
 
+@route("/")
 def index():
     if os.getenv("ENV") == "production":
         return "Welcome to our Picts manager API"
@@ -19,7 +20,6 @@ def index():
                 ][0],
             }
         )
-    # sort by GET, POST, PUT, PATCH, DELETE and by route length
     routes = sorted(
         routes,
         key=lambda x: (x["route"], x["method"]),
