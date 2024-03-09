@@ -16,4 +16,5 @@ def update(user_id: str):
     new_user = User(username=username, password=password, email=email)
 
     updated_user = user_repository.updateUser(_user_id, new_user)
+    del updated_user.password
     return updated_user
