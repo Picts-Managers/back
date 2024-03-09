@@ -10,6 +10,8 @@ from utils import route
 @route("/")
 def index():
     user = user_repository.getUsers()
+    for u in user:
+        del u.password
     return user
 
 
@@ -20,4 +22,5 @@ def index(user_id: str):
     if not len(user):
         abort(404, description="User not found")
     user = user[0]
+    del user.password
     return user
