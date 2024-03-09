@@ -2,8 +2,10 @@ from flask import request
 from bson import ObjectId
 from models.User import User
 from repositories import user_repository
+from utils import route
 
 
+@route("/")
 def update(param: str, user_id: str):
     _user_id = ObjectId(user_id)
     new_user = User()
