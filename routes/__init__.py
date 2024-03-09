@@ -1,11 +1,10 @@
 import importlib
 from utils import MongoJSONProvider
 import os
-from flask import Flask
-import inspect
 import logging
 
-app = Flask(__name__)
+from utils import app
+
 
 __logger = logging.getLogger("router_init")
 
@@ -16,18 +15,6 @@ for root, folders, files in os.walk("./routes", topdown=False):
             module = importlib.import_module(
                 f"{root[2:]}.{file[:-3]}".replace("/", ".")
             )
-            for name, obj in inspect.getmembers(module):
-                if inspect.isfunction(obj):
-                    route = f"{root[8:]}/{f'{name}/' if name != 'index' else ''}"
-                    params = inspect.signature(obj).parameters
-                    route += "/".join([f"<{param}>" for param in params])
-                    __logger.info(f"  {file[:-3].upper()} {route}")
-                    app.add_url_rule(
-                        route,
-                        route,
-                        view_func=obj,
-                        methods=[file[:-3].upper()],
-                    )
 
 __logger.info("Routes Initialized")
 
