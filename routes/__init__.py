@@ -1,5 +1,4 @@
 import importlib
-from utils import MongoJSONProvider
 import os
 import logging
 
@@ -17,5 +16,3 @@ for root, folders, files in os.walk("./routes", topdown=False):
             )
 
 __logger.info("Routes Initialized")
-
-app.json = MongoJSONProvider(app)

@@ -22,4 +22,4 @@ def update(param: str, user_id: str):
 
     updated_user = user_repository.updateUser(_user_id, new_user)
 
-    return updated_user.model_dump()
+    return updated_user

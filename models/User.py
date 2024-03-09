@@ -13,4 +13,4 @@ class User(BaseModel):
     token: str = Field(default=None)
 
     def model_dump(self):
-        return super().model_dump(by_alias=True, exclude_unset=True, exclude={"password"})
+        return super().model_dump(by_alias=True, exclude_unset=True)
