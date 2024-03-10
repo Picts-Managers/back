@@ -12,3 +12,4 @@ services:
             - .env
         volumes:
             - ./logs:/app/logs
+            - ./uploads:/app/uploads

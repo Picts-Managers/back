@@ -1,2 +1,3 @@
-from .Account import Account
-#TODO rajouter le modele User pour initialiser
+from .User import User
+from .Picture import Picture
+from .Album import Album
