@@ -18,8 +18,8 @@ def index():
 def index(user_id: str):
     _user_id = ObjectId(user_id)
     user = user_repository.getUserById(_user_id)
-    if not len(user):
+    if not user:
         abort(404, description="User not found")
-    user = user[0]
+
     del user.password
     return user
