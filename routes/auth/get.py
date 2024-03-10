@@ -2,19 +2,19 @@ import os
 
 import jwt
 from bson import ObjectId
-from flask import request
+from flask import request, abort
 from repositories import user_repository
 from utils import route
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 
-@route("/sign-in-with-token")
-def sign_in_with_token():
+@route("/login-with-token")
+def index():
     token = request.headers.get("Authorization")
 
     if token is None:
-        return "missing_token", 401
+        return abort(401, description="missing_token")
 
     try:
         token = token.replace("Bearer ", "")
@@ -30,8 +30,8 @@ def sign_in_with_token():
                 return user
 
     except jwt.ExpiredSignatureError:
-        return "expired_token", 401
+        return abort(401, description="expired_token")
     except jwt.InvalidTokenError:
-        return "invalid_token", 401
+        return abort(401, description="invalid_token")
 
-    return "invalid_token", 401
+    return abort(401, description="invalid_token")

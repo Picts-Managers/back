@@ -2,7 +2,7 @@ import os
 
 import bcrypt
 import jwt
-from flask import request
+from flask import request, abort
 from repositories import user_repository
 from models.User import User
 from utils import route
@@ -11,7 +11,7 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 
-@route("/sign-up")
+@route("/register")
 def index():
     username = request.json.get("username")
     password = request.json.get("password")
@@ -36,7 +36,7 @@ def index():
     return created_user_with_token
 
 
-@route("/sign-in")
+@route("/login")
 def index():
     login = request.json.get("login")
     password = request.json.get("password")
@@ -47,7 +47,7 @@ def index():
         user = user_repository.getUserByUsername(login)
 
     if not user:
-        return "user_not_found"
+        return abort(401, description="user_not_found")
 
     stored_password = user.password.encode('utf-8')
 
@@ -60,4 +60,4 @@ def index():
         del user.password
         return user
 
-    return "wrong_password"
+    return abort(401, description="wrong_password")
