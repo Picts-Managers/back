@@ -8,8 +8,8 @@ class User(BaseModel):
 
     id: ObjectId = Field(default=None, alias="_id")
     username: str
-    password: str = Field(default=None)
     email: str
+    password: str = Field(default=None)
     token: str = Field(default=None)
 
     def model_dump(self):

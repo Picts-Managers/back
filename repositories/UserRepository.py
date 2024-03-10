@@ -11,12 +11,20 @@ class __UserRepository:
     def getUsers(self) -> list[User]:
         return [User(**user) for user in self.collection.find({}) if user is not None]
 
-    def getUser(self, user_id: ObjectId) -> list[User]:
+    def getUserById(self, user_id: ObjectId) -> list[User]:
         return [
             User(**user)
             for user in self.collection.find({"_id": user_id})
             if user is not None
         ]
+
+    def getUserByEmail(self, user_email: ObjectId) -> User:
+        user = self.collection.find_one({"email": user_email})
+        return User(**user) if user else None
+
+    def getUserByUsername(self, user_username: ObjectId) -> User:
+        user = self.collection.find_one({"username": user_username})
+        return User(**user) if user else None
 
     def insertUser(self, new_user: User):
         result = self.collection.insert_one(new_user.model_dump())
