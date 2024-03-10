@@ -1,5 +1,5 @@
 from bson import ObjectId
-from flask import abort
+from flask import abort, send_file
 
 from repositories import picture_repository
 from utils import route
@@ -8,6 +8,7 @@ from utils import route
 @route("/")
 def index():
     pictures = picture_repository.getPictures()
+    pictures.sort(key=lambda x: x.date, reverse=False)
     return pictures
 
 
@@ -18,4 +19,4 @@ def index(picture_id: str):
     if not len(picture):
         abort(404, description="Picture not found")
     picture = picture[0]
-    return picture
+    return send_file(f"../uploads/{picture.id}", mimetype=picture.mimetype)

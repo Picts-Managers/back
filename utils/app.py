@@ -1,10 +1,12 @@
 import json
-import logging
 from flask import Flask, Response
 from pydantic import BaseModel
 
 from werkzeug.exceptions import HTTPException
 from utils.MongoJSONProvider import MongoJSONProvider
+
+from flask_cors import CORS
+from pillow_heif import register_heif_opener
 
 
 class App(Flask):
@@ -19,6 +21,10 @@ class App(Flask):
 
 app = App(__name__)
 app.json = MongoJSONProvider(app)
+cors = CORS(app)
+app.config["CORS_HEADERS"] = "Content-Type"
+
+register_heif_opener()
 
 
 @app.errorhandler(HTTPException)
