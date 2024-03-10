@@ -42,22 +42,14 @@ def index():
     password = request.json.get("password")
 
     if "@" in login:
-        user = user_repository.getUserByEmail(login)
+        user = user_repository.getUserByEmailAndPassword(user_email=login, password=password)
     else:
-        user = user_repository.getUserByUsername(login)
+        user = user_repository.getUserByUsernameAndPassword(user_username=login, password=password)
 
-    if not user:
-        return abort(401, description="user_not_found")
+    payload = {"id": str(user.id)}
+    token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
-    stored_password = user.password.encode('utf-8')
-
-    if bcrypt.checkpw(password.encode('utf-8'), stored_password):
-        payload = {"id": str(user.id)}
-        token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
-
-        user.token = token
-        user_repository.updateUser(user.id, user)
-        del user.password
-        return user
-
-    return abort(401, description="wrong_password")
+    user.token = token
+    user_repository.updateUser(user.id, user)
+    del user.password
+    return user
