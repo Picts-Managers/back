@@ -33,5 +33,12 @@ class __AlbumRepository:
     def deleteAlbum(self, album_id: ObjectId):
         return self.collection.delete_one({"_id": album_id})
 
+    def addPicture(self, album_id: ObjectId, picture_id: ObjectId):
+        self.collection.update_one(
+            {"_id": album_id}, {"$push": {"pictures_ids": picture_id}}
+        )
+        updated_album = self.collection.find_one({"_id": album_id})
+        return Album(**updated_album) if updated_album else None
+
 
 album_repository = __AlbumRepository()

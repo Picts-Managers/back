@@ -8,9 +8,10 @@ class Album(BaseModel):
 
     id: ObjectId = Field(default=None, alias="_id")
     owner_id: ObjectId = Field(default=None, alias="_owner_id")
+    cover_id: ObjectId = Field(default=None, alias="_cover_id")
     title: str
-    viewers_ids: list[ObjectId] = []
-    pictures_ids: list[ObjectId] = []
+    viewers_ids: list[ObjectId] = Field(default=[])
+    pictures_ids: list[ObjectId] = Field(default=[])
 
     def model_dump(self):
         return super().model_dump(by_alias=True, exclude_unset=True)
