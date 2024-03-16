@@ -1,7 +1,6 @@
 import os
 from utils import app, route
 
-
 @route("/")
 def index():
     if os.getenv("ENV") == "production":
@@ -10,6 +9,7 @@ def index():
     for route in app.url_map.iter_rules():
         if route.rule.startswith("/static"):
             continue
+
         routes.append(
             {
                 "route": route.rule,

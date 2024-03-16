@@ -1,6 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 from flask import request
+from middlewares.auth import isLogged
 from models import Picture
 
 from repositories import picture_repository
@@ -11,6 +12,7 @@ from utils.image import get_metadata
 
 
 @route("/")
+@isLogged
 def index():
     uploaded_file = request.files["file"]
     image = Image.open(uploaded_file)

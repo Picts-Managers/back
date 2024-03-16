@@ -10,7 +10,6 @@ class User(BaseModel):
     username: str
     password: str = None
     email: str
-    token: str = None
 
     def model_dump(self):
         return super().model_dump(by_alias=True, exclude_unset=True)

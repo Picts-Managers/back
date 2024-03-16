@@ -1,6 +1,7 @@
 from datetime import datetime
 from bson import ObjectId
 from flask import abort, request
+from middlewares.auth import isLogged
 from models import Picture
 
 from repositories import album_repository, picture_repository
@@ -9,9 +10,22 @@ from PIL import Image
 
 from utils.image import get_metadata
 
-
 @route("/<album_id>")
-def index(album_id: str):
+@isLogged
+def add_picture_in_album(album_id: str):
+    pictures = request.args.get(picture_id)
+    album_id = ObjectId(album_id)
+    for picture in pictures:
+        picture_id = ObjectId(picture)
+        album = album_repository.addPicture(
+            album_id,
+            picture_id,
+        )
+    return album
+
+@route("/upload/<album_id>")
+@isLogged
+def upload_picture_to_album(album_id: str):
     uploaded_file = request.files["file"]
     image = Image.open(uploaded_file)
     filename = ".".join(uploaded_file.filename.split(".")[:-1])
@@ -35,14 +49,3 @@ def index(album_id: str):
         picture.id,
     )
     return {"album": album, "picture": picture}
-
-
-@route("/<album_id>/<picture_id>")
-def index(album_id: str, picture_id: str):
-    album_id = ObjectId(album_id)
-    picture_id = ObjectId(picture_id)
-    album = album_repository.addPicture(
-        album_id,
-        picture_id,
-    )
-    return album

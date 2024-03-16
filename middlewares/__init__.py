@@ -1,1 +1,1 @@
-from .auth import isLoggedIn
+from .auth import isLogged

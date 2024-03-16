@@ -7,7 +7,7 @@ from utils import route
 
 
 @route("/")
-def index():
+def create_album():
     album_name = request.json.get("name")
 
     album = Album(
