@@ -1,6 +1,3 @@
-from bson import ObjectId
-from flask import abort
-
 from middlewares.auth import isLogged
 from repositories import album_repository
 from utils import route

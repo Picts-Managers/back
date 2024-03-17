@@ -1,6 +1,6 @@
 from datetime import datetime
 from bson import ObjectId
-from flask import abort, request
+from flask import request
 from middlewares.auth import isLogged
 from models import Picture
 
@@ -13,7 +13,7 @@ from utils.image import get_metadata
 @route("/<album_id>")
 @isLogged
 def add_picture_in_album(album_id: str):
-    pictures = request.args.get(picture_id)
+    pictures = request.query.picture_id
     album_id = ObjectId(album_id)
     for picture in pictures:
         picture_id = ObjectId(picture)

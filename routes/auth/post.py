@@ -1,23 +1,17 @@
-import os
-
-import bcrypt
-import jwt
-from bson import ObjectId
-from flask import g, request, abort
+from flask import request
 from middlewares.auth import isLogged
 from repositories import user_repository
 from models.User import User
 from utils import route
-from utils.auth import check_token, encrypt_password, generate_token
-
+from utils.auth import encrypt_password, generate_token
 
 
 
 @route("/register")
 def register():
-    username = request.json.get("username")
-    password = request.json.get("password")
-    email = request.json.get("email")
+    username = request.body.username
+    password = request.body.password
+    email = request.body.email
 
     hashed_password = encrypt_password(password)
 
@@ -30,8 +24,8 @@ def register():
 
 @route("/login")
 def login():
-    login = request.json.get("login")
-    password = request.json.get("password")
+    login = request.body.login
+    password = request.body.password
 
     if "@" in login:
         user = user_repository.getUserByEmailAndPassword(user_email=login, password=password)
@@ -44,4 +38,4 @@ def login():
 @route("/login-with-token")
 @isLogged
 def login_with_token():
-    return g.req_user
+    return request.req_user

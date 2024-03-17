@@ -1,5 +1,9 @@
 import os
+from middlewares import schema
 from utils import app, route
+from flask import request
+
+from schemas import test
 
 @route("/")
 def index():
@@ -25,3 +29,9 @@ def index():
         key=lambda x: (x["route"], x["method"]),
     )
     return routes
+
+@route("/test/<testParam>")
+@schema(test)
+def testEndpoint(testParam: str):
+    print(request.query.test)
+    return {"test": testParam}

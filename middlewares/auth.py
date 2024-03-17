@@ -1,5 +1,5 @@
 from functools import wraps
-from flask import abort, request, g
+from flask import abort, request
 import logging
 
 from repositories import user_repository
@@ -26,7 +26,7 @@ def isLogged(func):
             return abort(401, "unauthorized")
 
         del user.password
-        g.req_user = user
+        request.req_user = user
         return func(*args, **kwargs)
 
     return wrapper
