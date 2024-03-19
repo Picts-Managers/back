@@ -1,16 +1,7 @@
 from types import ModuleType
-from typing import Any
 
 from bson import ObjectId
-from flask.wrappers import Request as FlaskRequest
 from pydantic import BaseModel, ConfigDict, Field
-from pydantic_core import PydanticUndefined
-
-
-class ParsedRequest(FlaskRequest):
-    def __init__(self, query=None, body=None):
-        self.query = query
-        self.body = body
 
 
 class QueryType(BaseModel):
@@ -34,9 +25,6 @@ class Schema(ModuleType):
 class ObjectFromDict:
     def __init__(self, **entries):
         self.__dict__.update(entries)
-
-
-_Unset: Any = PydanticUndefined
 
 
 class DbObject(BaseModel):
