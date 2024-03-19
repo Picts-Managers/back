@@ -15,7 +15,7 @@ class __AlbumRepository:
             Album(**album) for album in self.collection.find({}) if album is not None
         ]
 
-    def getOwnedAlbums(self, owner_id: ObjectId) -> list[Album]:
+    def getMyAlbums(self, owner_id: ObjectId) -> list[Album]:
         return [
             Album(**album)
             for album in self.collection.find({"_owner_id": owner_id})
@@ -23,11 +23,8 @@ class __AlbumRepository:
         ]
 
     def getAlbum(self, album_id: ObjectId) -> list[Album]:
-        return [
-            Album(**album)
-            for album in self.collection.find({"_id": album_id})
-            if album is not None
-        ]
+        album = self.collection.find_one({"_id": album_id})
+        return Album(**album) if album else None
 
     def insertAlbum(self, new_album: Album):
         result = self.collection.insert_one(new_album.model_dump())
