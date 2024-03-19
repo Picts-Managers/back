@@ -1,10 +1,11 @@
 from flask import request
 
+from middlewares import schema
 from middlewares.auth import isLogged
 from models.User import User
 from repositories import user_repository
 from schemas.users import userUpdate
-from utils import route, schema
+from utils import route
 
 
 @route("/me")

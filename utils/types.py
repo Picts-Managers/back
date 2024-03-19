@@ -50,3 +50,8 @@ class DbObject(BaseModel):
 
     def model_dump(self, by_alias=True, exclude_none=True):
         return super().model_dump(by_alias=by_alias, exclude_none=exclude_none)
+
+
+class Coordinates(BaseModel):
+    latitude: str
+    longitude: str

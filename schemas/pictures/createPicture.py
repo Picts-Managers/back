@@ -4,19 +4,16 @@ from typing import Optional
 from bson import ObjectId
 from pydantic import BaseModel, field_validator
 
-
-class _ResLocation(BaseModel):
-    latitude: str
-    longitude: str
+from utils.types import Coordinates
 
 
 class Response(BaseModel):
     id: str
     filename: str
     owner_id: str
-    date: Optional[str] = None
-    location: Optional[_ResLocation] = None
-    viewers_ids: Optional[list[str]] = []
+    date: str = None
+    location: Optional[Coordinates] = None
+    viewers_ids: list[str] = []
 
     @field_validator("date")
     def validate_date(cls, value):

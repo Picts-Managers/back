@@ -1,7 +1,7 @@
-from utils.types import DbObject, Field
+from utils.types import DbObject
 
 
 class User(DbObject):
     username: str
-    password: str = Field(default=None)
+    password: str = None
     email: str
