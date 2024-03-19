@@ -1,13 +1,14 @@
-from flask import g, request
-from bson import ObjectId
+from flask import request
+
+from middlewares import schema
 from middlewares.auth import isLogged
-from models.User import User
-from repositories import user_repository
+from schemas.users import getUser
 from utils import route
 
 
 @route("/me")
 @isLogged
+@schema(getUser)
 def update():
     # _user_id = ObjectId(user_id)
     # # new_user = User()
@@ -24,4 +25,4 @@ def update():
     # updated_user = user_repository.updateUser(_user_id, new_user)
     # del updated_user.password
     # return updated_user
-    return g.req_user
+    return request.req_user

@@ -1,13 +1,13 @@
-import logging
-from bson import ObjectId
-from flask import abort, g
+from flask import request
 
+from middlewares import schema
 from middlewares.auth import isLogged
-from repositories import user_repository
+from schemas.users import getUser
 from utils import route
 
 
 @route("/me")
 @isLogged
+@schema(getUser)
 def index():
-    return g.req_user
+    return request.req_user

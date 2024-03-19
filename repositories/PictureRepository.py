@@ -1,7 +1,9 @@
-from bson import ObjectId
-from utils.db import client
 import os
+
+from bson import ObjectId
+
 from models import Picture
+from utils.db import client
 
 
 class __PictureRepository:
@@ -15,12 +17,16 @@ class __PictureRepository:
             if picture is not None
         ]
 
-    def getPicture(self, picture_id: ObjectId) -> list[Picture]:
+    def getMyPictures(self, owner: ObjectId) -> list[Picture]:
         return [
             Picture(**picture)
-            for picture in self.collection.find({"_id": picture_id})
+            for picture in self.collection.find({"_owner_id": owner})
             if picture is not None
         ]
+
+    def getPicture(self, picture_id: ObjectId) -> Picture:
+        picture = self.collection.find_one({"_id": picture_id})
+        return Picture(**picture) if picture else None
 
     def insertPicture(self, new_picture: Picture):
         result = self.collection.insert_one(new_picture.model_dump())

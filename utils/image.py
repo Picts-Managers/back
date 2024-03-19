@@ -1,6 +1,8 @@
 from datetime import datetime
-from PIL.Image import Image as ImageType, Exif
-from PIL.ExifTags import TAGS, GPSTAGS
+
+from PIL.ExifTags import GPSTAGS, TAGS
+from PIL.Image import Exif
+from PIL.Image import Image as ImageType
 from werkzeug.datastructures import FileStorage
 
 
@@ -57,5 +59,5 @@ def get_metadata(image: ImageType) -> dict:
 
     lat, long = _parse_gps_coordinates(gps_info)
     if lat and long:
-        parsed["location"] = {"lat": lat, "long": long}
+        parsed["location"] = {"latitude": lat, "longitude": long}
     return parsed

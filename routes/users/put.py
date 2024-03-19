@@ -1,25 +1,22 @@
-from flask import abort, g, request
-from bson import ObjectId
+from flask import request
+
+from middlewares import schema
 from middlewares.auth import isLogged
 from models.User import User
 from repositories import user_repository
+from schemas.users import userUpdate
 from utils import route
 
 
 @route("/me")
 @isLogged
+@schema(userUpdate)
 def update():
-    body: dict = request.json
+    username = request.body.username
+    email = request.body.email
 
-    if not body:
-        return abort(400, "Invalid request")
+    new_user = User(username=username, email=email)
 
-    username = body.get("username")
-    password = body.get("password")
-    email = body.get("email")
-
-    new_user = User(username=username, password=password, email=email)
-
-    updated_user = user_repository.updateUser(g.req_user, new_user)
+    updated_user = user_repository.updateUser(request.req_user, new_user)
     del updated_user.password
     return updated_user

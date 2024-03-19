@@ -1,6 +1,7 @@
 import os
 from utils import app, route
 
+
 @route("/")
 def index():
     if os.getenv("ENV") == "production":
