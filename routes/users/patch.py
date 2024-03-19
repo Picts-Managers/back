@@ -1,10 +1,14 @@
 from flask import request
+
+from middlewares import schema
 from middlewares.auth import isLogged
+from schemas.users import getUser
 from utils import route
 
 
 @route("/me")
 @isLogged
+@schema(getUser)
 def update():
     # _user_id = ObjectId(user_id)
     # # new_user = User()

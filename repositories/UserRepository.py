@@ -1,10 +1,11 @@
+import os
+
 import bcrypt
 from bson import ObjectId
 from flask import abort
 
-from utils.db import client
-import os
 from models.User import User
+from utils.db import client
 
 
 class __UserRepository:
@@ -18,21 +19,21 @@ class __UserRepository:
         user = self.collection.find_one({"_id": user_id})
         return User(**user) if user else None
 
-    def getUserByEmailAndPassword(self, user_email: str, password: str) -> User :
+    def getUserByEmailAndPassword(self, user_email: str, password: str) -> User:
         user = self.collection.find_one({"email": user_email})
         if user:
-            stored_password = user['password'].encode('utf-8')
-            if bcrypt.checkpw(password.encode('utf-8'), stored_password):
+            stored_password = user["password"].encode("utf-8")
+            if bcrypt.checkpw(password.encode("utf-8"), stored_password):
                 return User(**user)
             else:
                 return abort(401, description="wrong_password")
         return abort(401, description="user_not_found")
 
-    def getUserByUsernameAndPassword(self, user_username: str, password: str) -> User :
+    def getUserByUsernameAndPassword(self, user_username: str, password: str) -> User:
         user = self.collection.find_one({"username": user_username})
         if user:
-            stored_password = user['password'].encode('utf-8')
-            if bcrypt.checkpw(password.encode('utf-8'), stored_password):
+            stored_password = user["password"].encode("utf-8")
+            if bcrypt.checkpw(password.encode("utf-8"), stored_password):
                 return User(**user)
         return abort(401, description="user_not_found")
 

@@ -1,13 +1,10 @@
-import json
-from flask import Flask, Response, request
-from pydantic import BaseModel
-
-from werkzeug.exceptions import HTTPException
-from utils.MongoJSONProvider import MongoJSONProvider
-
+from flask import Flask, Response, json, request
 from flask_cors import CORS
 from pillow_heif import register_heif_opener
+from pydantic import BaseModel
+from werkzeug.exceptions import HTTPException
 
+from utils.MongoJSONProvider import MongoJSONProvider
 from utils.types import ObjectFromDict
 
 
@@ -17,7 +14,7 @@ class App(Flask):
 
     def make_response(self, rv) -> Response:
         if issubclass(type(rv), BaseModel):
-            rv = rv.model_dump()
+            rv = dict(rv)
         return super().make_response(rv)
 
 
@@ -47,4 +44,7 @@ def handle_exception(e):
 def before_request():
     request.req_user = None
     request.query = ObjectFromDict(**dict(request.args))
-    request.body = ObjectFromDict(**dict(request.json))
+    try:
+        request.body = ObjectFromDict(**dict(request.json))
+    except Exception:
+        pass

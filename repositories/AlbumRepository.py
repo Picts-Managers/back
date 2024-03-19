@@ -1,7 +1,9 @@
-from bson import ObjectId
-from utils.db import client
 import os
+
+from bson import ObjectId
+
 from models import Album
+from utils.db import client
 
 
 class __AlbumRepository:
@@ -11,6 +13,13 @@ class __AlbumRepository:
     def getAlbums(self) -> list[Album]:
         return [
             Album(**album) for album in self.collection.find({}) if album is not None
+        ]
+
+    def getOwnedAlbums(self, owner_id: ObjectId) -> list[Album]:
+        return [
+            Album(**album)
+            for album in self.collection.find({"_owner_id": owner_id})
+            if album is not None
         ]
 
     def getAlbum(self, album_id: ObjectId) -> list[Album]:

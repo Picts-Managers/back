@@ -1,6 +1,7 @@
-from functools import wraps
-from flask import abort, request
 import logging
+from functools import wraps
+
+from flask import abort, request
 
 from repositories import user_repository
 from utils.auth import check_token
@@ -16,13 +17,15 @@ def isLogged(func):
             return abort(401, "unauthorized")
 
         user_id = check_token(token[7:])
-
         if not user_id:
             return abort(401, "unauthorized")
 
         try:
             user = user_repository.getUserById(user_id)
-        except Exception as e:
+        except Exception:
+            return abort(401, "unauthorized")
+
+        if not user:
             return abort(401, "unauthorized")
 
         del user.password
