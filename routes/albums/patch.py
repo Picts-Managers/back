@@ -53,7 +53,11 @@ def upload_picture_to_album(album_id: str):
     )
     picture = picture_repository.insertPicture(picture)
 
-    image = image.convert("RGB")
+    if uploaded_file.mimetype == "image/png":
+        white_image = Image.new("RGBA", image.size, "WHITE")
+        white_image.paste(image, mask=image)
+        image = white_image.convert("RGB")
+
     image.save(f"uploads/{picture.id}", "JPEG")
     image.thumbnail((200, 200))
     image.save(f"uploads/{picture.id}.low", "JPEG")

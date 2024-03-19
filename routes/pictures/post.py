@@ -22,14 +22,12 @@ def index():
     filename = ".".join(uploaded_file.filename.split(".")[:-1])
     metadata = get_metadata(image)
     picture = Picture(
-        id=ObjectId(),
         owner_id=request.req_user.id,
+        location=metadata.get("location", None),
         date=metadata.get("date", datetime.now().isoformat()),
         filename=filename,
         mimetype=uploaded_file.mimetype,
     )
-    if metadata.get("location"):
-        picture.location = metadata["location"]
     picture = picture_repository.insertPicture(picture)
 
     if uploaded_file.mimetype == "image/png":
