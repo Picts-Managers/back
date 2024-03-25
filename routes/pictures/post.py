@@ -13,7 +13,7 @@ from utils.image import get_metadata
 from schemas.pictures import createPicture
 
 
-@route("/")
+@route("/upload")
 @isLogged
 @schema(createPicture)
 def index():
@@ -30,7 +30,7 @@ def index():
     )
     picture = picture_repository.insertPicture(picture)
 
-    if uploaded_file.mimetype == "image/png":
+    if image.mode == "RGBA":
         white_image = Image.new("RGBA", image.size, "WHITE")
         white_image.paste(image, mask=image)
         image = white_image.convert("RGB")
