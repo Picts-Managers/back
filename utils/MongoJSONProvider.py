@@ -1,9 +1,6 @@
-import logging
-from flask.json.provider import DefaultJSONProvider
 from bson import ObjectId
+from flask.json.provider import DefaultJSONProvider
 from pydantic import BaseModel
-
-from utils.types import DbObject
 
 
 class MongoJSONProvider(DefaultJSONProvider):
