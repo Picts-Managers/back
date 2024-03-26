@@ -1,11 +1,6 @@
 name: Test and Lint
 
 on:
-    push:
-        branches:
-            - main
-            - 'dev'
-            - 'add/github-actions-test'
     pull_request:
         branches:
             - main
