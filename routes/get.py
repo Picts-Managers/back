@@ -7,16 +7,16 @@ def index():
     if os.getenv("ENV") == "production":
         return "Welcome to our Picts manager API"
     routes = []
-    for route in app.url_map.iter_rules():
-        if route.rule.startswith("/static"):
+    for _route in app.url_map.iter_rules():
+        if _route.rule.startswith("/static"):
             continue
 
         routes.append(
             {
-                "route": route.rule,
+                "route": _route.rule,
                 "method": [
                     method
-                    for method in route.methods
+                    for method in _route.methods
                     if method not in ["HEAD", "OPTIONS"]
                 ][0],
             }

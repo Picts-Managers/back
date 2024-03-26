@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from bson import ObjectId
 from flask import request
 from PIL import Image
 
@@ -8,9 +7,9 @@ from middlewares import schema
 from middlewares.auth import isLogged
 from models import Picture
 from repositories import picture_repository
+from schemas.pictures import createPicture
 from utils import route
 from utils.image import get_metadata
-from schemas.pictures import createPicture
 
 
 @route("/upload")
