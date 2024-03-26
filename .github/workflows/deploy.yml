@@ -1,9 +1,9 @@
 name: Build and Deploy
 on:
-    push:
-        branches:
-            - main
-            - 'dev'
+    workflow_run:
+        workflows: ['Test and Lint']
+        types:
+            - completed
     workflow_dispatch:
 
 jobs:
@@ -11,14 +11,16 @@ jobs:
         runs-on: ubuntu-latest
         environment: ${{ github.ref == 'refs/heads/main' && 'production' || 'development' }}
         steps:
-            - name: Connect to Server
-              uses: appleboy/ssh-action@master
-              with:
-                  host: ${{ secrets.HOST }}
-                  username: ${{ secrets.USERNAME }}
-                  key: ${{ secrets.SSH_KEY }}
-                  port: ${{ secrets.PORT }}
-                  script: |
-                      cd ${{ secrets.APP_PATH }}
-                      git pull
-                      docker compose up --build -d
+            - name: Checkout
+              uses: actions/checkout@v2
+            # - name: Connect to Server
+            #   uses: appleboy/ssh-action@master
+            #   with:
+            #       host: ${{ secrets.HOST }}
+            #       username: ${{ secrets.USERNAME }}
+            #       key: ${{ secrets.SSH_KEY }}
+            #       port: ${{ secrets.PORT }}
+            #       script: |
+            #           cd ${{ secrets.APP_PATH }}
+            #           git pull
+            #           docker compose up --build -d
