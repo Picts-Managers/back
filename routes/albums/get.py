@@ -11,9 +11,6 @@ from utils import route
 @schema(getAlbums)
 def get_albums():
     albums = album_repository.getMyAlbums(request.req_user.id)
-    response = []
     for album in albums:
-        tmp = dict(album)
-        tmp["cover_id"] = album.pictures_ids[0] if len(album.pictures_ids) else None
-        response.append(tmp)
-    return {"albums": response}
+        album.cover_id = album.pictures_ids[0] if len(album.pictures_ids) else None
+    return {"albums": albums}

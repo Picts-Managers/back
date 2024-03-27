@@ -32,6 +32,7 @@ class DbObject(BaseModel):
         from_attributes=True,
         populate_by_name=True,
         arbitrary_types_allowed=True,
+        extra="allow",
     )
 
     id: ObjectId = Field(default=None, alias="_id")
