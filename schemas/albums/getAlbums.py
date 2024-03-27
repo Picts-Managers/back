@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class _ResAlbum(BaseModel):
+    id: str
     owner_id: str
     cover_id: Optional[str] = None
     title: str
