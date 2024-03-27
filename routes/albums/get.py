@@ -14,6 +14,6 @@ def get_albums():
     response = []
     for album in albums:
         tmp = dict(album)
-        tmp["cover_ide"] = album.pictures_ids[0] if len(album.pictures_ids) else None
+        tmp["cover_id"] = album.pictures_ids[0] if len(album.pictures_ids) else None
         response.append(tmp)
     return {"albums": response}
