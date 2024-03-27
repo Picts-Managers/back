@@ -3,7 +3,6 @@ from datetime import datetime
 from PIL.ExifTags import GPSTAGS, TAGS
 from PIL.Image import Exif
 from PIL.Image import Image as ImageType
-from werkzeug.datastructures import FileStorage
 
 
 def _get_geotagging(exif: Exif):
