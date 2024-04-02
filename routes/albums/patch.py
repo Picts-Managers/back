@@ -68,3 +68,12 @@ def upload_picture_to_album(album_id: str):
         picture.id,
     )
     return {"album": album, "picture": picture}
+
+
+@route("/share/<album_id>")
+@isLogged
+def share_album(album_id):
+    target_user_id = ObjectId(request.body.user)
+    album_id = ObjectId(album_id)
+    album = album_repository.share(album_id, target_user_id)
+    return album
