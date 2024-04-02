@@ -24,7 +24,7 @@ exclude = [
     "venv",
     "__init__.py",
 ]
-per-file-ignores = {}
+lint.per-file-ignores = {}
 
 # Allow unused variables when underscore-prefixed.
-dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+lint.dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"

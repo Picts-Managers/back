@@ -8,7 +8,7 @@ from middlewares import schema
 from middlewares.auth import isLogged
 from models import Picture
 from repositories import album_repository, picture_repository
-from schemas.albums import addPictureToAlbum
+from schemas.albums import addPictureToAlbum, shareAlbum
 from utils import route
 from utils.image import get_metadata
 
@@ -72,6 +72,7 @@ def upload_picture_to_album(album_id: str):
 
 @route("/share/<album_id>")
 @isLogged
+@schema(shareAlbum)
 def share_album(album_id):
     target_user_id = ObjectId(request.body.user)
     album_id = ObjectId(album_id)
