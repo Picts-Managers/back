@@ -29,7 +29,10 @@ def index():
     )
     picture = picture_repository.insertPicture(picture)
 
-    if image.mode == "RGBA":
+    if image.mode == "RGBA" or image.mode == "P":
+        if image.mode == "P":
+            image = image.convert("RGBA")
+
         white_image = Image.new("RGBA", image.size, "WHITE")
         white_image.paste(image, mask=image)
         image = white_image.convert("RGB")
