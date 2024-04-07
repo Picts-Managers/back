@@ -44,6 +44,7 @@ def handle_exception(e):
 def before_request():
     request.req_user = None
     request.query = ObjectFromDict(**dict(request.args))
+
     try:
         request.body = ObjectFromDict(**dict(request.json))
     except Exception:
