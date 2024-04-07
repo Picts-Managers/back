@@ -22,7 +22,7 @@ class __AlbumRepository:
             if album is not None
         ]
 
-    def getAlbum(self, album_id: ObjectId) -> list[Album]:
+    def getAlbum(self, album_id: ObjectId) -> Album:
         album = self.collection.find_one({"_id": album_id})
         return Album(**album) if album else None
 

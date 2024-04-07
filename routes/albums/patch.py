@@ -17,28 +17,34 @@ from utils.image import get_metadata
 @isLogged
 @schema(addPictureToAlbum)
 def add_picture_in_album(album_id: str):
-    not_found_error = False
 
-    pictures = request.body.picture_id
+    if not ObjectId.is_valid(album_id):
+        abort(400, "Invalid album id")
+    if not ObjectId.is_valid(request.body.picture_id):
+        abort(400, "Invalid picture id")
+
     album_id = ObjectId(album_id)
-    for picture in pictures:
-        picture_id = ObjectId(picture)
-        if picture_repository.getPicture(picture_id):
-            album = album_repository.addPicture(
-                album_id,
-                picture_id,
-            )
-        else:
-            not_found_error = True
-            continue
-    if not_found_error:
-        abort(404, "Some picture not found")
+    picture_id = ObjectId(request.body.picture_id)
+
+    target_album = album_repository.getAlbum(album_id)
+    if not target_album:
+        abort(404, "Album not found")
+    if picture_id in target_album.pictures_ids:
+        abort(400, "Picture already in album")
+
+    if picture_repository.getPicture(picture_id):
+        album = album_repository.addPicture(
+            album_id,
+            picture_id,
+        )
+    else:
+        abort(404, "Picture not found")
+
     return album
 
 
 @route("/upload/<album_id>")
 @isLogged
-@schema(addPictureToAlbum)
 def upload_picture_to_album(album_id: str):
     uploaded_file = request.files["file"]
     image = Image.open(uploaded_file)
@@ -53,7 +59,10 @@ def upload_picture_to_album(album_id: str):
     )
     picture = picture_repository.insertPicture(picture)
 
-    if uploaded_file.mimetype == "image/png":
+    if image.mode == "RGBA" or image.mode == "P":
+        if image.mode == "P":
+            image = image.convert("RGBA")
+
         white_image = Image.new("RGBA", image.size, "WHITE")
         white_image.paste(image, mask=image)
         image = white_image.convert("RGB")
