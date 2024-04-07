@@ -3,3 +3,7 @@ pydantic
 Flask
 python-dotenv
 gunicorn
+bcrypt
+PyJWT
+flask_cors
+pillow-heif
