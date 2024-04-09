@@ -79,7 +79,7 @@ def upload_picture_to_album(album_id: str):
     return album
 
 
-@route("/share/<album_id>")
+@route("/<album_id>/share")
 @isLogged
 @schema(shareAlbum)
 def share_album(album_id):

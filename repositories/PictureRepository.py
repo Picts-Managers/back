@@ -40,7 +40,7 @@ class __PictureRepository:
         updated_picture = self.collection.find_one({"_id": picture_id})
         return Picture(**updated_picture) if updated_picture else None
 
-    def share(self, picture_id: ObjectId, user_id: ObjectId):
+    def sharePicture(self, picture_id: ObjectId, user_id: ObjectId):
         self.collection.update_one(
             {"_id": picture_id}, {"$push": {"viewers_ids": user_id}}
         )
