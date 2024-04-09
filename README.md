@@ -121,9 +121,9 @@ This endpoint allows users to register and obtain an access token.
 
 #### Response Body
 
-| Key          | Description                                                 | **Type** |
-| ------------ | ----------------------------------------------------------- | -------- |
-| access_token | The user's Bearer token that he can use to perform request. | string   |
+| Key          | **Type** | Description                                                 |
+| ------------ | -------- | ----------------------------------------------------------- |
+| access_token | string   | The user's Bearer token that he can use to perform request. |
 
 # 📁 Collection: Users
 
@@ -180,16 +180,6 @@ This endpoint allows users to update their profile information.
 | username | string   | The user's updated username.      |
 | email    | string   | The user's updated email address. |
 
-## Method: PUT
-
-> ```
-> {{base_url}}/users/me
-> ```
-
-⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃ ⁃
-
-## End-point: Delete my account
-
 ## Delete Album
 
 This endpoint allows users to delete an existing album.
@@ -211,8 +201,6 @@ This endpoint allows users to delete an existing album.
 | message   | string   | A message confirming the successful deletion of the user. |
 
 # 📁 Collection: Albums
-
-## End-point: Get my albums
 
 ## Get Albums
 
@@ -507,8 +495,6 @@ This endpoint allows users to delete an existing album.
 
 # 📁 Collection: Pictures
 
-## End-point: Get my pictures
-
 ## Get Pictures
 
 This endpoint retrieves a list of pictures.
@@ -625,9 +611,9 @@ This endpoint allows users to share a picture with other users.
 
 #### Request Body Parameters
 
-| **Parameter** | **Type** | **Description**                        |
-| ------------- | -------- | -------------------------------------- |
-| user_email       | string   | The email of the user to share the picture with. |
+| **Parameter** | **Type** | **Description**                                  |
+| ------------- | -------- | ------------------------------------------------ |
+| user_email    | string   | The email of the user to share the picture with. |
 
 ### Response
 
