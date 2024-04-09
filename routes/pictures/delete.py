@@ -18,4 +18,4 @@ def get_picture(picture_id: str):
         abort(403, "You must be the owner of the picture to delete it")
     picture_repository.deletePicture(picture.id)
 
-    return True
+    return {"message": "deleted"}
