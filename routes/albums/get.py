@@ -83,6 +83,7 @@ def get_picture_in_album_low_res(album_id: str, picture_id: str):
         and request.req_user.id != album.owner_id
     ):
         abort(403, "You don't have access to this album")
+
     picture = picture_repository.getPicture(picture_id)
     if not picture:
         abort(404, "Picture not found")
