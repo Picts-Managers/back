@@ -8,7 +8,7 @@ from schemas.pictures import sharePicture
 from utils.routeDecorator import route
 
 
-@route("/share/<picture_id>")
+@route("/<picture_id>/share")
 @isLogged
 @schema(sharePicture)
 def share_picture(picture_id):
