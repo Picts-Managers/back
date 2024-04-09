@@ -121,9 +121,9 @@ This endpoint allows users to register and obtain an access token.
 
 #### Response Body
 
-| Key          | Description                                                 | **Type** |
+| Key          | **Type** | Description                                                 |
 | ------------ | ----------------------------------------------------------- | -------- |
-| access_token | The user's Bearer token that he can use to perform request. | string   |
+| access_token | string   | The user's Bearer token that he can use to perform request. |
 
 # 📁 Collection: Users
 
