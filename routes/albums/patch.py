@@ -76,7 +76,7 @@ def upload_picture_to_album(album_id: str):
         album_id,
         picture.id,
     )
-    return {"album": album, "picture": picture}
+    return album
 
 
 @route("/share/<album_id>")

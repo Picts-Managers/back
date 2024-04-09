@@ -4,8 +4,8 @@ from utils.regex import isEmail, isUsername
 
 
 class Request(BaseModel):
-    username: str = Field(pattern=isUsername)
-    email: str = Field(pattern=isEmail)
+    username: str = Field(default=None, pattern=isUsername)
+    email: str = Field(default=None, pattern=isEmail)
 
 
 class Response(BaseModel):
