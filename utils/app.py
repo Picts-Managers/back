@@ -21,7 +21,6 @@ class App(Flask):
 app = App(__name__)
 app.json = MongoJSONProvider(app)
 cors = CORS(app)
-
 app.config["CORS_HEADERS"] = "Content-Type"
 
 
