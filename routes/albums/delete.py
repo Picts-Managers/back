@@ -18,4 +18,4 @@ def get_album(album_id: str):
         abort(403, "You must be the owner of the album to delete it")
     album_repository.deleteAlbum(album.id)
 
-    return True
+    return {"message": "deleted"}

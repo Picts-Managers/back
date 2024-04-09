@@ -627,7 +627,7 @@ This endpoint allows users to share a picture with other users.
 
 | **Parameter** | **Type** | **Description**                        |
 | ------------- | -------- | -------------------------------------- |
-| user_id       | string   | The user ID to share the picture with. |
+| user_email       | string   | The email of the user to share the picture with. |
 
 ### Response
 

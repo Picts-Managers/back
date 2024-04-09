@@ -1,14 +1,15 @@
 import datetime
 from typing import Optional
+
 from bson import ObjectId
 from pydantic import BaseModel, Field, field_validator
 
-from utils.regex import isObjectId
+from utils.regex import isEmail
 from utils.types import Coordinates
 
 
 class Request(BaseModel):
-    user_id: str = Field(pattern=isObjectId)
+    email: str = Field(pattern=isEmail)
 
 
 class Response(BaseModel):
