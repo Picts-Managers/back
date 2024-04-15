@@ -2,6 +2,7 @@ from bson import ObjectId
 from flask import abort, request, send_file
 
 from middlewares import isLogged, schema
+from models import Album
 from repositories import album_repository, picture_repository
 from schemas.albums import getAlbum, getAlbums
 from utils import route
@@ -43,6 +44,22 @@ def get_shared_albums(request):
     for album in albums:
         album.cover_id = album.pictures_ids[0] if len(album.pictures_ids) else None
     return {"albums": albums}
+
+
+@route("/fav")
+@isLogged
+@schema(getAlbum)
+def get_fav_album():
+    pictures = picture_repository.getFavPictures(request.req_user.id)
+
+    album = Album(
+        owner_id=request.req_user.id,
+        title="Favourites",
+        pictures_ids=[picture.id for picture in pictures],
+        cover_id=pictures[-1].id or None,
+        viewers_ids=[],
+    )
+    return album
 
 
 @route("/<album_id>/<picture_id>")

@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask, Response, json, request
 from flask_cors import CORS
 from pillow_heif import register_heif_opener
@@ -43,8 +45,9 @@ def handle_exception(e):
 @app.before_request
 def before_request():
     request.req_user = None
-    request.query = ObjectFromDict(**dict(request.args))
+    request.body = None
     try:
-        request.body = ObjectFromDict(**dict(request.json))
+        if request.headers.get("content-type") == "application/json":
+            request.body = ObjectFromDict(**dict(request.json or {}))
     except Exception:
         pass
