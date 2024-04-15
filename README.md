@@ -41,7 +41,7 @@ PICTSMANAGER is a mobile application designed to facilitate the management and s
 
 -   The application stores only pictures' names and associated IDs. Pictures, metadata, and other information are stored on a distant back server and can be retrieved and updated with specific requests.
 -   Pictures taken from the phone camera need to be compressed before being stored, with a compromise between performance and quality.
--   The user who creates an album becomes its only owner and also owns all the pictures it contains. Ownership cannot be shared, transferred, or resigned.
+-   The user who creates an album becomes its only owner and owns all its pictures. Ownership cannot be shared, transferred, or resigned.
 -   Only the owner of a picture/album can modify/delete it.
 -   Users can only see pictures/albums they own or have been granted access to.
 -   Implementation of a research engine without external libraries.
@@ -52,7 +52,7 @@ PICTSMANAGER is a mobile application designed to facilitate the management and s
 -   Architecture designed with scalability in mind.
 -   Use of efficient algorithms and database models.
 -   Containerization of services with Docker and orchestration with Docker Compose.
--   Automation of the construction of the mobile application and the back-end within containers.
+-   Automation of the mobile application and back-end construction within containers.
 -   Comprehensive documentation including Software Architecture Specification and Software Qualification.
 -   Implementation of a testing policy.
 -   Logging of all errors and important messages in a clear manner.
@@ -245,6 +245,30 @@ This endpoint retrieves information about a specific album identified by its ID.
 -   Base URL: [http://localhost:3000](http://localhost:3000)
 -   Path: /albums/`album_id`
 -   Authentication: Bearer token required
+
+### Response
+
+-   Status: 200
+-   Content-Type: application/json
+
+#### Response Body
+
+| **Key**      | **Type**         | **Description**                                                            |
+| ------------ | ---------------- | -------------------------------------------------------------------------- |
+| id           | string           | The unique identifier of the album.                                        |
+| owner_id     | string           | The unique identifier of the owner of the album.                           |
+| title        | string           | The title of the album.                                                    |
+| cover_id     | string           | The unique identifier of the cover picture of the album.                   |
+| viewers_ids  | array of strings | List of unique identifiers of users who have permission to view the album. |
+| pictures_ids | array of strings | List of unique identifiers of pictures in the album.                       |
+
+## Get Album of favorites pictures
+
+This endpoint get a fake album containing favorites pictures.
+
+-   Method: GET
+-   Base URL: [http://localhost:3000](http://localhost:3000)
+-   Path: /albums/fav
 
 ### Response
 
@@ -603,7 +627,6 @@ This endpoint allows users to share a picture with other users.
 -   Method: PATCH
 -   Base URL: [http://localhost:3000](http://localhost:3000)
 -   Path: /pictures/`picture_id`/share
--   Authentication: Bearer token required
 
 ### Request Body
 
@@ -611,16 +634,57 @@ This endpoint allows users to share a picture with other users.
 
 #### Request Body Parameters
 
-| **Parameter** | **Type** | **Description**                                  |
-| ------------- | -------- | ------------------------------------------------ |
-| user_email    | string   | The email of the user to share the picture with. |
+| **Parameter** | **Type** | **Description**                        |
+| ------------- | -------- | -------------------------------------- |
+| user_id       | string   | The user ID to share the picture with. |
 
 ### Response
 
 -   Status: 200
--   Content-Type: image/jpeg (or appropriate image format)
+-   Content-Type: application/json
 
-The response will contain the shared picture.
+#### Response Body
+
+| **Field**          | **Type** | **Description**                                                                               |
+| ------------------ | -------- | --------------------------------------------------------------------------------------------- |
+| id                 | string   | The unique identifier of the uploaded picture.                                                |
+| filename           | string   | The filename of the uploaded picture.                                                         |
+| owner_id           | string   | The unique identifier of the picture's owner.                                            |
+| date               | string   | The date the picture was uploaded. If not provided, it defaults to the current date and time. |
+| location           | object   | The coordinates of the location where the picture was taken. (Optional)                       |
+| location.latitude  | string   | The latitude of the location.                                                                 |
+| location.longitude | string   | The longitude of the location.                                                                |
+| viewers_ids        | array    | List of unique identifiers of users who have permission to view the picture.                  |
+
+## Fav Picture
+
+This endpoint allows users to add a picture to their favorites.
+
+-   Method: PATCH
+-   Base URL: [http://localhost:3000](http://localhost:3000)
+-   Path: /pictures/`picture_id`/fav
+
+### Request Body
+
+-   Content-Type: application/json
+
+### Response
+
+-   Status: 200
+-   Content-Type: application/json
+
+#### Response Body
+
+| **Field**          | **Type** | **Description**                                                                               |
+| ------------------ | -------- | --------------------------------------------------------------------------------------------- |
+| id                 | string   | The unique identifier of the uploaded picture.                                                |
+| filename           | string   | The filename of the uploaded picture.                                                         |
+| owner_id           | string   | The unique identifier of the owner of the picture.                                            |
+| date               | string   | The date the picture was uploaded. If not provided, it defaults to the current date and time. |
+| location           | object   | The coordinates of the location where the picture was taken. (Optional)                       |
+| location.latitude  | string   | The latitude of the location.                                                                 |
+| location.longitude | string   | The longitude of the location.                                                                |
+| viewers_ids        | array    | List of unique identifiers of users who have permission to view the picture.                  |
 
 ## Delete Picture
 
