@@ -1,5 +1,3 @@
-import logging
-
 from flask import Flask, Response, json, request
 from flask_cors import CORS
 from pillow_heif import register_heif_opener
