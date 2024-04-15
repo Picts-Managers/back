@@ -286,6 +286,30 @@ This endpoint get a fake album containing favorites pictures.
 | viewers_ids  | array of strings | List of unique identifiers of users who have permission to view the album. |
 | pictures_ids | array of strings | List of unique identifiers of pictures in the album.                       |
 
+## Get Album of favorites pictures
+
+This endpoint get a fake album containing favorites pictures.
+
+-   Method: GET
+-   Base URL: [http://localhost:3000](http://localhost:3000)
+-   Path: /albums/fav
+
+### Response
+
+-   Status: 200
+-   Content-Type: application/json
+
+#### Response Body
+
+| **Key**      | **Type**         | **Description**                                                            |
+| ------------ | ---------------- | -------------------------------------------------------------------------- |
+| id           | string           | The unique identifier of the album.                                        |
+| owner_id     | string           | The unique identifier of the owner of the album.                           |
+| title        | string           | The title of the album.                                                    |
+| cover_id     | string           | The unique identifier of the cover picture of the album.                   |
+| viewers_ids  | array of strings | List of unique identifiers of users who have permission to view the album. |
+| pictures_ids | array of strings | List of unique identifiers of pictures in the album.                       |
+
 ## Get Shared Albums
 
 This endpoint retrieves a list of albums shared with the user.
@@ -649,7 +673,7 @@ This endpoint allows users to share a picture with other users.
 | ------------------ | -------- | --------------------------------------------------------------------------------------------- |
 | id                 | string   | The unique identifier of the uploaded picture.                                                |
 | filename           | string   | The filename of the uploaded picture.                                                         |
-| owner_id           | string   | The unique identifier of the picture's owner.                                            |
+| owner_id           | string   | The unique identifier of the picture's owner.                                                 |
 | date               | string   | The date the picture was uploaded. If not provided, it defaults to the current date and time. |
 | location           | object   | The coordinates of the location where the picture was taken. (Optional)                       |
 | location.latitude  | string   | The latitude of the location.                                                                 |
@@ -671,6 +695,21 @@ This endpoint allows users to add a picture to their favorites.
 ### Response
 
 -   Status: 200
+-   Content-Type: application/json
+
+#### Response Body
+
+| **Field**          | **Type** | **Description**                                                                               |
+| ------------------ | -------- | --------------------------------------------------------------------------------------------- |
+| id                 | string   | The unique identifier of the uploaded picture.                                                |
+| filename           | string   | The filename of the uploaded picture.                                                         |
+| owner_id           | string   | The unique identifier of the owner of the picture.                                            |
+| date               | string   | The date the picture was uploaded. If not provided, it defaults to the current date and time. |
+| location           | object   | The coordinates of the location where the picture was taken. (Optional)                       |
+| location.latitude  | string   | The latitude of the location.                                                                 |
+| location.longitude | string   | The longitude of the location.                                                                |
+| viewers_ids        | array    | List of unique identifiers of users who have permission to view the picture.                  |
+
 -   Content-Type: application/json
 
 #### Response Body
