@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class Response(BaseModel):
-    id: str
+    id: Optional[str] = None
     owner_id: str
     cover_id: Optional[str] = None
     title: str

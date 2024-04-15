@@ -28,6 +28,13 @@ class __PictureRepository:
         picture = self.collection.find_one({"_id": picture_id})
         return Picture(**picture) if picture else None
 
+    def getFavPictures(self, owner: ObjectId) -> list[Picture]:
+        return [
+            Picture(**picture)
+            for picture in self.collection.find({"_owner_id": owner, "is_fav": True})
+            if picture is not None
+        ]
+
     def insertPicture(self, new_picture: Picture):
         result = self.collection.insert_one(new_picture.model_dump())
         inserted_picture = self.collection.find_one({"_id": result.inserted_id})
@@ -44,6 +51,11 @@ class __PictureRepository:
         self.collection.update_one(
             {"_id": picture_id}, {"$push": {"viewers_ids": user_id}}
         )
+        updated_picture = self.collection.find_one({"_id": picture_id})
+        return Picture(**updated_picture) if updated_picture else None
+
+    def favPicture(self, picture_id: ObjectId, is_fav: bool = False):
+        self.collection.update_one({"_id": picture_id}, {"$set": {"is_fav": is_fav}})
         updated_picture = self.collection.find_one({"_id": picture_id})
         return Picture(**updated_picture) if updated_picture else None
 

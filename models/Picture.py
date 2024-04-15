@@ -12,3 +12,4 @@ class Picture(DbObject):
     location: Optional[Coordinates] = None
     viewers_ids: list[ObjectId] = []
     mimetype: str
+    is_fav: bool = False
