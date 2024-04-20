@@ -1,23 +1,22 @@
-from flask import request
+from flask import abort, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
-from models.User import User
 from repositories import user_repository
-from schemas.users import userUpdate
+from schemas.users import userUpdatePassword
 from utils import route
+from utils.auth import encrypt_password, verify_password
 
 
 @route("/me")
 @isLogged
-@schema(userUpdate)
-def update():
-    username = (
-        request.body.username if request.body.username else request.req_user.username
-    )
-    email = request.body.email if request.body.email else request.req_user.email
-    new_user = User(username=username, email=email)
-
-    updated_user = user_repository.updateUser(request.req_user, new_user)
+@schema(userUpdatePassword)
+def update_password():
+    user = user_repository.getUserById(request.req_user.id)
+    if verify_password(request.body.password, user.password):
+        user.password = encrypt_password(request.body.password)
+        updated_user = user_repository.updateUser(user.id, user)
+    else:
+        return abort(401, description="wrong_password")
     del updated_user.password
     return updated_user
