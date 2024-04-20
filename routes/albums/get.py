@@ -56,7 +56,7 @@ def get_fav_album():
         owner_id=request.req_user.id,
         title="Favourites",
         pictures_ids=[picture.id for picture in pictures],
-        cover_id=pictures[-1].id or None,
+        cover_id=pictures[-1].id if len(pictures) else None,
         viewers_ids=[],
     )
     return album
