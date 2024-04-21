@@ -10,7 +10,7 @@ from utils import route
 @route("/me")
 @isLogged
 @schema(userUpdate)
-def update_password():
+def update_user():
     updated_user = user_repository.updateUser(request.req_user.id, request.body)
     del updated_user.password
     return updated_user
