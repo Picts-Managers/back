@@ -1,7 +1,30 @@
-from pydantic import BaseModel, Field
+import datetime
+from typing import Optional
 
-from utils.regex import isObjectId
+from bson import ObjectId
+from pydantic import BaseModel, Field, field_validator
+
+from utils.regex import isEmail
+from utils.types import Coordinates
 
 
 class Request(BaseModel):
-    user: str = Field(pattern=isObjectId)
+    email: str = Field(pattern=isEmail)
+
+
+class Response(BaseModel):
+    id: str
+    filename: str
+    owner_id: str
+    date: str = None
+    is_fav: bool = False
+    location: Optional[Coordinates] = None
+    viewers_ids: list[str] = []
+
+    @field_validator("date")
+    def validate_date(cls, value):
+        if value is None:
+            return ObjectId(cls.id).generation_time.isoformat()
+        if isinstance(value, datetime.datetime):
+            return value.isoformat()
+        return value

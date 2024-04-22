@@ -12,6 +12,7 @@ class _ResPictures(BaseModel):
     filename: str
     owner_id: str
     date: str = None
+    is_fav: bool = False
     location: Optional[Coordinates] = None
     viewers_ids: list[str] = []
 
