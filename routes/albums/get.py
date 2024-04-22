@@ -13,8 +13,13 @@ from utils import route
 @schema(getAlbums)
 def get_albums():
     albums = album_repository.getMyAlbums(request.req_user.id)
+
     for album in albums:
-        album.cover_id = album.pictures_ids[0] if len(album.pictures_ids) else None
+        if len(album.pictures_ids):
+            album.cover_id = album.pictures_ids[0]
+            album.pictures = picture_repository.getPicturesFromIdList(
+                album.pictures_ids
+            )
     return {"albums": albums}
 
 
@@ -33,7 +38,9 @@ def get_album(album_id: str):
     ):
         abort(403, "You don't have access to this album")
 
-    album.cover_id = album.pictures_ids[0] if len(album.pictures_ids) else None
+    if len(album.pictures_ids):
+        album.cover_id = album.pictures_ids[0]
+        album.pictures = picture_repository.getPicturesFromIdList(album.pictures_ids)
     return album
 
 

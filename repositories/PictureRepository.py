@@ -24,6 +24,15 @@ class __PictureRepository:
             if picture is not None
         ]
 
+    def getPicturesFromIdList(self, pictures_ids: list[ObjectId]) -> list[Picture]:
+        return [
+            Picture(**picture)
+            for picture in self.collection.find({"_id": {"$in": pictures_ids}}).sort(
+                {"date": 1}
+            )
+            if picture is not None
+        ]
+
     def getPicture(self, picture_id: ObjectId) -> Picture:
         picture = self.collection.find_one({"_id": picture_id})
         return Picture(**picture) if picture else None
