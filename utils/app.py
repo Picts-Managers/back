@@ -43,9 +43,8 @@ def handle_exception(e):
 @app.before_request
 def before_request():
     request.req_user = None
-    request.body = None
+    request.query = ObjectFromDict(**dict(request.args))
     try:
-        if request.headers.get("content-type") == "application/json":
-            request.body = ObjectFromDict(**dict(request.json or {}))
+        request.body = ObjectFromDict(**dict(request.json))
     except Exception:
         pass

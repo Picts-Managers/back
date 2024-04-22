@@ -17,21 +17,6 @@ def get_pictures():
     return {"pictures": pictures}
 
 
-@route("/<picture_id>/info")
-@isLogged
-def get_specific_picture_info(picture_id: str):
-    _picture_id = ObjectId(picture_id)
-    picture = picture_repository.getPicture(_picture_id)
-    if not picture:
-        abort(404, description="Picture not found")
-    if (
-        request.req_user.id not in picture.viewers_ids
-        and request.req_user.id != picture.owner_id
-    ):
-        abort(403, description="You don't have access to this picture")
-    return picture
-
-
 @route("/<picture_id>")
 @isLogged
 def get_specific_picture_file(picture_id: str):

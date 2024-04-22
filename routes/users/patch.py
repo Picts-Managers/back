@@ -1,22 +1,28 @@
-from flask import abort, request
+from flask import request
 
 from middlewares import schema
 from middlewares.auth import isLogged
-from repositories import user_repository
-from schemas.users import userUpdatePassword
+from schemas.users import getUser
 from utils import route
-from utils.auth import encrypt_password, verify_password
 
 
 @route("/me")
 @isLogged
-@schema(userUpdatePassword)
-def update_password():
-    user = user_repository.getUserById(request.req_user.id)
-    if verify_password(request.body.password, user.password):
-        user.password = encrypt_password(request.body.password)
-        updated_user = user_repository.updateUser(user.id, user)
-    else:
-        return abort(401, description="wrong_password")
-    del updated_user.password
-    return updated_user
+@schema(getUser)
+def update():
+    # _user_id = ObjectId(user_id)
+    # # new_user = User()
+
+    # body = request.json
+    # match body:
+    #     case "username":
+    #         new_user = User(username=body)
+    #     case "password":
+    #         new_user = User(password=body)
+    #     case "email":
+    #         new_user = User(email=body)
+
+    # updated_user = user_repository.updateUser(_user_id, new_user)
+    # del updated_user.password
+    # return updated_user
+    return request.req_user

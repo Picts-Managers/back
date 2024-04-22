@@ -19,10 +19,6 @@ class __UserRepository:
         user = self.collection.find_one({"_id": user_id})
         return User(**user) if user else None
 
-    def getUserByEmail(self, user_email: str) -> User:
-        user = self.collection.find_one({"email": user_email})
-        return User(**user) if user else None
-
     def getUserByEmailAndPassword(self, user_email: str, password: str) -> User:
         user = self.collection.find_one({"email": user_email})
         if user:
