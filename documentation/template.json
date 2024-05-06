@@ -1,0 +1,20 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "REST API",
+        "description": "This API was developed using Python Flask.",
+        "version": "0.0.0"
+    },
+    "paths": {},
+    "components": {
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "Bearer",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "name": "Authorization"
+            }
+        }
+    }
+}

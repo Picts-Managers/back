@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from flask import request
+from flask import Blueprint, request
 from PIL import Image
 
 from middlewares import schema
@@ -8,11 +8,12 @@ from middlewares.auth import isLogged
 from models import Picture
 from repositories import picture_repository
 from schemas.pictures import createPicture
-from utils import route
 from utils.image import get_metadata
 
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
-@route("/upload")
+
+@blueprint.post("/upload")
 @isLogged
 @schema(createPicture)
 def index():

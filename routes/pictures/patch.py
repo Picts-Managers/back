@@ -1,14 +1,15 @@
 from bson import ObjectId
-from flask import abort, request
+from flask import Blueprint, abort, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from repositories import picture_repository, user_repository
 from schemas.pictures import favPicture, sharePicture
-from utils.routeDecorator import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/<picture_id>/share")
+@blueprint.patch("/<picture_id>/share")
 @isLogged
 @schema(sharePicture)
 def share_picture(picture_id: str):
@@ -26,7 +27,7 @@ def share_picture(picture_id: str):
     return picture
 
 
-@route("/<picture_id>/fav")
+@blueprint.patch("/<picture_id>/fav")
 @isLogged
 @schema(favPicture)
 def fav_picture(picture_id: str):

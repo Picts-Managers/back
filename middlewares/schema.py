@@ -22,17 +22,14 @@ def schema(schema: SchemaType):
                 except ValidationError as e:
                     return abort(400, "Bad Request" + f": {e}" if IS_DEBUG else "")
 
-            if (
-                hasattr(schema, "Request")
-                and issubclass(schema.Request, BaseModel)
-                and request.headers.get("content-type") == "application/json"
-            ):
+            if hasattr(schema, "Request") and issubclass(schema.Request, BaseModel):
                 try:
                     request.body = schema.Request(**request.json)
                 except ValidationError as e:
                     return abort(400, "Bad Request" + f": {e}" if IS_DEBUG else "")
 
             res = func(*args, **kwargs)
+
             if hasattr(schema, "Response") and issubclass(schema.Response, BaseModel):
                 try:
                     prepared_res = json.loads(json.dumps(res))

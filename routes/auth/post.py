@@ -1,17 +1,18 @@
-from flask import request
+from flask import Blueprint, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from models.User import User
 from repositories import user_repository
 from schemas.auth import login, register
-from utils import route
 from utils.auth import encrypt_password, generate_token
 
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
-@route("/register")
+
+@blueprint.post("/register")
 @schema(register)
-def register():
+def register_req():
     username = request.body.username
     password = request.body.password
     email = request.body.email
@@ -27,10 +28,10 @@ def register():
     return {"access_token": generate_token(created_user.id)}
 
 
-@route("/login")
+@blueprint.post("/login")
 @schema(login)
-def login():
-    login = request.body.login
+def login_req():
+    login = request.body.login.lower()
     password = request.body.password
 
     if "@" in login:
@@ -45,7 +46,7 @@ def login():
     return {"access_token": generate_token(user.id)}
 
 
-@route("/login-with-token")
+@blueprint.post("/login-with-token")
 @isLogged
 def login_with_token():
     return request.req_user

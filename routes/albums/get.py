@@ -1,14 +1,15 @@
 from bson import ObjectId
-from flask import abort, request, send_file
+from flask import Blueprint, abort, request, send_file
 
 from middlewares import isLogged, schema
 from models import Album
 from repositories import album_repository, picture_repository
 from schemas.albums import getAlbum, getAlbums
-from utils import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/")
+@blueprint.get("/")
 @isLogged
 @schema(getAlbums)
 def get_albums():
@@ -23,7 +24,7 @@ def get_albums():
     return {"albums": albums}
 
 
-@route("/<album_id>")
+@blueprint.get("/<album_id>")
 @isLogged
 @schema(getAlbum)
 def get_album(album_id: str):
@@ -44,7 +45,7 @@ def get_album(album_id: str):
     return album
 
 
-@route("/shared")
+@blueprint.get("/shared")
 @isLogged
 def get_shared_albums(request):
     albums = album_repository.getSharedAlbums(request.req_user.id)
@@ -53,7 +54,7 @@ def get_shared_albums(request):
     return {"albums": albums}
 
 
-@route("/fav")
+@blueprint.get("/fav")
 @isLogged
 @schema(getAlbum)
 def get_fav_album():
@@ -69,7 +70,7 @@ def get_fav_album():
     return album
 
 
-@route("/<album_id>/<picture_id>")
+@blueprint.get("/<album_id>/<picture_id>")
 @isLogged
 def get_picture_in_album(album_id: str, picture_id: str):
     album_id = ObjectId(album_id)
@@ -91,7 +92,7 @@ def get_picture_in_album(album_id: str, picture_id: str):
     return send_file(f"../uploads/{picture.id}", mimetype=picture.mimetype)
 
 
-@route("/<album_id>/<picture_id>/low")
+@blueprint.get("/<album_id>/<picture_id>/low")
 @isLogged
 def get_picture_in_album_low_res(album_id: str, picture_id: str):
     album_id = ObjectId(album_id)

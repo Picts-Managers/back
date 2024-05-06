@@ -1,12 +1,13 @@
-from flask import request
+from flask import Blueprint, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from schemas.users import getUser
-from utils import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/me")
+@blueprint.get("/me")
 @isLogged
 @schema(getUser)
 def index():

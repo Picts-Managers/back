@@ -1,13 +1,14 @@
-from flask import request
+from flask import Blueprint, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from repositories import user_repository
 from schemas.users import userUpdate
-from utils import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/me")
+@blueprint.put("/me")
 @isLogged
 @schema(userUpdate)
 def update_user():

@@ -1,14 +1,15 @@
-from flask import abort, request
+from flask import Blueprint, abort, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from repositories import user_repository
 from schemas.users import userUpdatePassword
-from utils import route
 from utils.auth import encrypt_password, verify_password
 
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
-@route("/me")
+
+@blueprint.patch("/me")
 @isLogged
 @schema(userUpdatePassword)
 def update_password():
