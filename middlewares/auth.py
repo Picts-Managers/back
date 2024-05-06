@@ -13,7 +13,6 @@ def isLogged(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         token = request.headers.get("Authorization")
-        print(token)
         if not token or not token.startswith("Bearer "):
             return abort(401, "unauthorized")
 

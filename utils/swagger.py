@@ -206,7 +206,6 @@ def _generate_template():
         for ref in REFS_TO_IMPORT:
             template.setdefault("$defs", {})
             template["$defs"][ref] = type_file.__dict__[ref].model_json_schema()
-    print(template["components"])
     return template
 
 
