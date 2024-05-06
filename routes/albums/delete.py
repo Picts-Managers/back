@@ -1,12 +1,13 @@
 from bson import ObjectId
-from flask import abort, request
+from flask import Blueprint, abort, request
 
 from middlewares.auth import isLogged
 from repositories import album_repository
-from utils.routeDecorator import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/<album_id>")
+@blueprint.delete("/<album_id>")
 @isLogged
 def get_album(album_id: str):
     if not ObjectId.is_valid(album_id):

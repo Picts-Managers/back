@@ -1,7 +1,9 @@
+import datetime
 from types import ModuleType
+from typing import Optional
 
 from bson import ObjectId
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class QueryType(BaseModel):
@@ -44,3 +46,30 @@ class DbObject(BaseModel):
 class Coordinates(BaseModel):
     latitude: str
     longitude: str
+
+
+class ResPicture(BaseModel):
+    id: str
+    filename: str
+    owner_id: str
+    date: str = None
+    is_fav: bool = False
+    location: Optional[Coordinates] = None
+    viewers_ids: list[str] = []
+
+    @field_validator("date")
+    def validate_date(cls, value):
+        if value is None:
+            return ObjectId(cls.id).generation_time.isoformat()
+        if isinstance(value, datetime.datetime):
+            return value.isoformat()
+        return value
+
+
+class ResAlbum(BaseModel):
+    id: str
+    owner_id: str
+    cover_id: Optional[str] = None
+    title: str
+    viewers_ids: list[str] = []
+    pictures: list[ResPicture] = []

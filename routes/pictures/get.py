@@ -1,14 +1,15 @@
 from bson import ObjectId
-from flask import abort, request, send_file
+from flask import Blueprint, abort, request, send_file
 
 from middlewares import schema
 from middlewares.auth import isLogged
 from repositories import picture_repository
 from schemas.pictures import getPictures
-from utils import route
+
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
 
-@route("/")
+@blueprint.get("/")
 @isLogged
 @schema(getPictures)
 def get_pictures():
@@ -17,7 +18,7 @@ def get_pictures():
     return {"pictures": pictures}
 
 
-@route("/<picture_id>/info")
+@blueprint.get("/<picture_id>/info")
 @isLogged
 def get_specific_picture_info(picture_id: str):
     _picture_id = ObjectId(picture_id)
@@ -32,7 +33,7 @@ def get_specific_picture_info(picture_id: str):
     return picture
 
 
-@route("/<picture_id>")
+@blueprint.get("/<picture_id>")
 @isLogged
 def get_specific_picture_file(picture_id: str):
     _picture_id = ObjectId(picture_id)
@@ -47,7 +48,7 @@ def get_specific_picture_file(picture_id: str):
     return send_file(f"../uploads/{picture.id}", mimetype=picture.mimetype)
 
 
-@route("/<picture_id>/low")
+@blueprint.get("/<picture_id>/low")
 @isLogged
 def get_specific_picture_file_low_res(picture_id: str):
     _picture_id = ObjectId(picture_id)

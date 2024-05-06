@@ -1,7 +1,7 @@
 from datetime import datetime
 
 from bson import ObjectId
-from flask import abort, request
+from flask import Blueprint, abort, request
 from PIL import Image
 
 from middlewares import schema
@@ -9,11 +9,12 @@ from middlewares.auth import isLogged
 from models import Picture
 from repositories import album_repository, picture_repository
 from schemas.albums import addPictureToAlbum, shareAlbum
-from utils import route
 from utils.image import get_metadata
 
+blueprint = Blueprint(__name__.replace(".", "/"), __name__)
 
-@route("/<album_id>")
+
+@blueprint.patch("/<album_id>")
 @isLogged
 @schema(addPictureToAlbum)
 def add_picture_in_album(album_id: str):
@@ -43,7 +44,7 @@ def add_picture_in_album(album_id: str):
     return album
 
 
-@route("/upload/<album_id>")
+@blueprint.patch("/upload/<album_id>")
 @isLogged
 def upload_picture_to_album(album_id: str):
     uploaded_file = request.files["file"]
@@ -79,7 +80,7 @@ def upload_picture_to_album(album_id: str):
     return album
 
 
-@route("/<album_id>/share")
+@blueprint.patch("/<album_id>/share")
 @isLogged
 @schema(shareAlbum)
 def share_album(album_id):
