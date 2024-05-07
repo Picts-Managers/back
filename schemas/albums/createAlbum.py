@@ -3,6 +3,7 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 from utils.regex import isValidName
+from utils.types import ResPicture
 
 
 class Request(BaseModel):
@@ -15,4 +16,4 @@ class Response(BaseModel):
     title: str
     cover_id: Optional[str] = None
     viewers_ids: list[str] = []
-    pictures_ids: list[str] = []
+    pictures: list[ResPicture] = []

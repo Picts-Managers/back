@@ -1,5 +1,3 @@
-import os
-
 import bcrypt
 from bson import ObjectId
 from flask import abort
@@ -10,7 +8,7 @@ from utils.db import client
 
 class __UserRepository:
     def __init__(self):
-        self.collection = client[os.getenv("DB_NAME")].users
+        self.collection = client.users
 
     def getUsers(self) -> list[User]:
         return [User(**user) for user in self.collection.find({}) if user is not None]
@@ -21,6 +19,10 @@ class __UserRepository:
 
     def getUserByEmail(self, user_email: str) -> User:
         user = self.collection.find_one({"email": user_email})
+        return User(**user) if user else None
+
+    def getUserByUsername(self, user_username: str) -> User:
+        user = self.collection.find_one({"username": user_username})
         return User(**user) if user else None
 
     def getUserByEmailAndPassword(self, user_email: str, password: str) -> User:

@@ -47,10 +47,15 @@ def get_album(album_id: str):
 
 @blueprint.get("/shared")
 @isLogged
-def get_shared_albums(request):
+def get_shared_albums():
     albums = album_repository.getSharedAlbums(request.req_user.id)
     for album in albums:
-        album.cover_id = album.pictures_ids[0] if len(album.pictures_ids) else None
+        if len(album.pictures_ids):
+            album.cover_id = album.pictures_ids[0]
+            album.pictures = picture_repository.getPicturesFromIdList(
+                album.pictures_ids
+            )
+
     return {"albums": albums}
 
 
@@ -63,7 +68,7 @@ def get_fav_album():
     album = Album(
         owner_id=request.req_user.id,
         title="Favourites",
-        pictures_ids=[picture.id for picture in pictures],
+        pictures=pictures,
         cover_id=pictures[-1].id if len(pictures) else None,
         viewers_ids=[],
     )

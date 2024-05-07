@@ -1,5 +1,3 @@
-import os
-
 from bson import ObjectId
 
 from models import Picture
@@ -8,7 +6,7 @@ from utils.db import client
 
 class __PictureRepository:
     def __init__(self):
-        self.collection = client[os.getenv("DB_NAME")].pictures
+        self.collection = client.pictures
 
     def getPictures(self) -> list[Picture]:
         return [

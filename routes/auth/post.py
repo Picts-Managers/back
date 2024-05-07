@@ -1,4 +1,4 @@
-from flask import Blueprint, request
+from flask import Blueprint, abort, request
 
 from middlewares import schema
 from middlewares.auth import isLogged
@@ -22,6 +22,11 @@ def register_req():
     new_user = User(
         username=username, password=hashed_password.decode("utf-8"), email=email
     )
+
+    if user_repository.getUserByEmail(
+        new_user.email
+    ) or user_repository.getUserByUsername(new_user.username):
+        return abort(400, "User already exists")
 
     created_user = user_repository.insertUser(new_user)
 
