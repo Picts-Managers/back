@@ -1,11 +1,11 @@
 import logging
 
-from utils import loggingConfig
+from routes import init_routes
+from utils import app, loggingConfig
 
 loggingConfig.setupLogging()
+init_routes()
 
-import routes  # noqa: E402, F401
-from utils import app  # noqa: E402
 
 if __name__ == "__main__":
     app.run()
