@@ -4,8 +4,8 @@ import pytest
 from bson import ObjectId
 
 print(os.listdir())
-import routes
-from utils import app, db
+import routes  # noqa: E402
+from utils import app, db  # noqa: E402
 
 
 @pytest.fixture(
