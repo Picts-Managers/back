@@ -8,8 +8,9 @@ if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
-    import routes
     from utils import app, db
+
+    from . import routes
 
 
 @pytest.fixture(
