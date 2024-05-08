@@ -42,4 +42,6 @@ jobs:
                   mongodb-version: 4.4.15
 
             - name: Run tests
+              env:
+                IS_CI: "true"
               run: pytest tests
