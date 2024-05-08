@@ -3,9 +3,8 @@ import os
 import pytest
 from bson import ObjectId
 
-from utils import app, db  # noqa: E402
-
-from .. import routes  # noqa: E402
+import routes
+from utils import app, db
 
 
 @pytest.fixture(
