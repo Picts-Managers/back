@@ -3,8 +3,12 @@ import os
 import pytest
 from bson import ObjectId
 
-import routes
-from utils import app, db
+if not os.getenv("GITHUB_CI"):
+    import routes
+    from utils import app, db
+else:
+    from .. import routes
+    from ..utils import app, db
 
 
 @pytest.fixture(
