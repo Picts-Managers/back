@@ -18,6 +18,7 @@ def set_test_env():
 
     print("Setting up test environment")
 
+    print(os.listdir())
     db.init_db_client()
 
     routes.init_routes()
