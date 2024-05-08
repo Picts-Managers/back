@@ -4,7 +4,6 @@ import sys
 import pytest
 from bson import ObjectId
 
-print(os.getenv("IS_CI"))
 if not os.getenv("IS_CI"):
     import routes
     from utils import app, db

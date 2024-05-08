@@ -30,11 +30,11 @@ jobs:
                   python -m pip install --upgrade pip
                   pip install -r tests/requirements.txt
 
-            # - name: Lint with Ruff
-            #   run: |
-            #       pip install ruff
-            #       ruff --output-format=github .
-            #   continue-on-error: false
+            - name: Lint with Ruff
+              run: |
+                  pip install ruff
+                  ruff --output-format=github .
+              continue-on-error: false
 
             - name: Start MongoDB
               uses: supercharge/mongodb-github-action@1.10.0
