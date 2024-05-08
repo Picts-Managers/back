@@ -3,6 +3,7 @@ import os
 import pytest
 from bson import ObjectId
 
+print(os.listdir())
 import routes
 from utils import app, db
 
@@ -18,7 +19,6 @@ def set_test_env():
 
     print("Setting up test environment")
 
-    print(os.listdir())
     db.init_db_client()
 
     routes.init_routes()
