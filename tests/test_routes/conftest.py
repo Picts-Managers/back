@@ -3,7 +3,7 @@ import os
 import pytest
 from bson import ObjectId
 
-if not os.getenv("GITHUB"):
+if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
