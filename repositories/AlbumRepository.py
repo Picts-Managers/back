@@ -1,5 +1,3 @@
-import os
-
 from bson import ObjectId
 
 from models import Album
@@ -8,7 +6,7 @@ from utils.db import client
 
 class __AlbumRepository:
     def __init__(self):
-        self.collection = client[os.getenv("DB_NAME")].albums
+        self.collection = client.albums
 
     def getAlbums(self) -> list[Album]:
         return [

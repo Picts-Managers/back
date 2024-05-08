@@ -78,7 +78,7 @@ def _get_route_params(url: str, schema: Schema):
         for param in re.findall(r"{(.*?)}", url)
     ]
 
-    if hasattr(schema, "Query"):
+    if schema and hasattr(schema, "Query"):
         params += _parse_query_params_from_schema(schema.Query)
 
     return params
@@ -180,7 +180,7 @@ def _generate_specs():
 
                 specs[f"{('/' + tag if tag != 'Root' else '')}{url}"][method] = {
                     "tags": [tag.capitalize()],
-                    "parameters": _get_route_params(url, schema) if schema else [],
+                    "parameters": (_get_route_params(url, schema)),
                     "requestBody": (
                         _parse_body_params_from_schema(schema.Request)
                         if hasattr(schema, "Request")
@@ -214,6 +214,7 @@ def init_swagger():
         "openapi": "3.0.3",
         "specs_route": "/",
     }
+
     Swagger(
         app,
         template=_generate_template(),

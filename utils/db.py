@@ -1,11 +1,13 @@
 import os
 
-if os.getenv("ENV") == "TEST":
-    import mongomock
+from pymongo import MongoClient
+from pymongo.database import Database
 
-    client = mongomock.MongoClient()
+db: MongoClient = None
+client: Database = None
 
-else:
-    from pymongo import MongoClient
 
-    client = MongoClient(os.getenv("DB_URI"))
+def init_db_client():
+    global client, db
+    db = MongoClient(os.getenv("DB_URI"))
+    client = db[os.getenv("DB_NAME")]
