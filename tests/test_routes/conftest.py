@@ -9,7 +9,7 @@ if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
-    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
     print(sys.path)
     import routes
     from utils import app, db
