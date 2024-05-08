@@ -3,12 +3,13 @@ import os
 import pytest
 from bson import ObjectId
 
+print(os.getenv("IS_CI"))
 if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
     from .. import routes
-    from ..utils import app, db
+    from utils import app, db
 
 
 @pytest.fixture(
