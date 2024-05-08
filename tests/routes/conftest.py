@@ -3,9 +3,9 @@ import os
 import pytest
 from bson import ObjectId
 
-print(os.listdir())
-import routes  # noqa: E402
 from utils import app, db  # noqa: E402
+
+from .. import routes  # noqa: E402
 
 
 @pytest.fixture(
@@ -45,5 +45,7 @@ def create_collection():
             "email": "test@a.co",
         }
     )
+
     yield
+
     db.client.drop_collection("users")
