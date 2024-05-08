@@ -3,7 +3,7 @@ import os
 import pytest
 from bson import ObjectId
 
-from routes import init_routes
+import routes
 from utils import app, db
 
 
@@ -20,7 +20,7 @@ def set_test_env():
 
     db.init_db_client()
 
-    init_routes()
+    routes.init_routes()
 
     app.config.update(
         {
