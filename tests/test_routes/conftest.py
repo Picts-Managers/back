@@ -8,7 +8,7 @@ if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
-    from .. import routes
+    import routes
     from utils import app, db
 
 
