@@ -9,9 +9,9 @@ if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
-    print("Importing from utils", sys.path)
-    from . import routes
-    from .utils import app, db
+    sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+    import routes
+    from utils import app, db
 
 
 @pytest.fixture(
