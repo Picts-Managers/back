@@ -1,4 +1,5 @@
 import os
+import sys
 
 import pytest
 from bson import ObjectId
@@ -8,9 +9,9 @@ if not os.getenv("IS_CI"):
     import routes
     from utils import app, db
 else:
-    from .utils import app, db
-
+    print("Importing from utils", sys.path)
     from . import routes
+    from .utils import app, db
 
 
 @pytest.fixture(
