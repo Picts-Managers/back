@@ -15,7 +15,18 @@ def get_token():
     global token
 
     token = auth.generate_token(ObjectId("663a200fcb14e84e2fff0db8"))
+
+    db.client.users.insert_one(
+        {
+            "_id": ObjectId("663a200fcb14e8fe2fff0db8"),
+            "username": "testa",
+            "password": "$2b$12$srElp3FcISlRlcG1HY3tAOMQbOTuKEUVxHFQHTahH/oSc1QDYLkGi",
+            "email": "testa@a.co",
+        }
+    )
+
     yield
+
     token = None
 
 
@@ -113,7 +124,7 @@ def test_get_album_no_rights():
 
 
 def test_add_image_to_album():
-    image_path = "./tests/assets/pictures/background_luffy.png"
+    image_path = "./tests/assets/pictures/image1.png"
     album = db.client.albums.find_one(
         {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
     )
@@ -135,6 +146,29 @@ def test_add_image_to_album():
     assert len(album.get("pictures_ids")) == 1
 
 
+def test_add_image_with_transparency_to_album():
+    image_path = "./tests/assets/pictures/image2.png"
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    with open(image_path, "rb") as image:
+        response = app.test_client().patch(
+            f"/albums/upload/{album.get('_id')}",
+            headers={
+                "Authorization": "Bearer " + token,
+                "Content-Type": "multipart/form-data",
+            },
+            data={
+                "file": (image, image_path.split("/")[-1]),
+            },
+        )
+        assert response.status_code == 200
+
+    album = db.client.albums.find_one({"_id": album.get("_id")})
+    assert len(album.get("pictures_ids")) == 2
+
+
 def test_get_albums_with_picture_success():
     response = app.test_client().get(
         "/albums/",
@@ -151,7 +185,7 @@ def test_get_albums_with_picture_success():
     )[0].get("pictures")[0].get("id")
     assert response.json.get("albums")[0].get("owner_id") == "663a200fcb14e84e2fff0db8"
     assert response.json.get("albums")[0].get("viewers_ids") == []
-    assert len(response.json.get("albums")[0].get("pictures")) == 1
+    assert len(response.json.get("albums")[0].get("pictures")) == 2
 
 
 def test_get_album_with_picture_success():
@@ -171,7 +205,7 @@ def test_get_album_with_picture_success():
     assert response.json.get("cover_id") == response.json.get("pictures")[0].get("id")
     assert response.json.get("owner_id") == "663a200fcb14e84e2fff0db8"
     assert response.json.get("viewers_ids") == []
-    assert len(response.json.get("pictures")) == 1
+    assert len(response.json.get("pictures")) == 2
 
 
 def test_get_shared_albums_empty_success():
@@ -453,6 +487,282 @@ def test_get_low_res_image_album_with_no_right():
 
     response = app.test_client().get(
         f"/albums/{album.get('_id')}/{picture.get('_id')}/low",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+    )
+
+    assert response.status_code == 403
+
+
+def test_add_image_with_id_to_album():
+
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+    picture = db.client.pictures.find_one(
+        {
+            "_owner_id": ObjectId("663a200fcb14e84e2fff0db8"),
+            "_id": {"$nin": album.get("pictures_ids")},
+        }
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "picture_id": picture.get("_id"),
+        },
+    )
+
+    assert response.status_code == 200
+
+    album = db.client.albums.find_one({"_id": album.get("_id")})
+    assert picture.get("_id") in album.get("pictures_ids")
+
+
+def test_add_image_with_id_to_album_2():
+
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+    picture = db.client.pictures.find_one(
+        {
+            "_owner_id": ObjectId("663a200fcb14e84e2fff0db8"),
+            "_id": {"$in": album.get("pictures_ids")},
+        }
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "picture_id": picture.get("_id"),
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_add_image_to_album_invalid_album_id():
+    picture = db.client.pictures.find_one(
+        {
+            "_owner_id": ObjectId("663a200fcb14e84e2fff0db8"),
+        }
+    )
+
+    response = app.test_client().patch(
+        "/albums/1",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "picture_id": picture.get("_id"),
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_add_image_to_album_no_picture_id():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}",
+        headers={
+            "Authorization": "Bearer " + token,
+            "Content-Type": "application/json",
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_add_image_to_album_not_found():
+    picture = db.client.pictures.find_one(
+        {
+            "_owner_id": ObjectId("663a200fcb14e84e2fff0db8"),
+        }
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{'0' * 24}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "picture_id": picture.get("_id"),
+        },
+    )
+
+    assert response.status_code == 404
+
+
+def test_add_image_to_album_image_not_found():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "picture_id": "02" * 12,
+        },
+    )
+
+    assert response.status_code == 404
+
+
+def test_share_album():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}/share",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "email": "testa@a.co",
+        },
+    )
+
+    assert response.status_code == 200
+
+    album = db.client.albums.find_one({"_id": album.get("_id")})
+
+    assert ObjectId("663a200fcb14e8fe2fff0db8") in album.get("viewers_ids")
+
+
+def test_share_album_invalid_id():
+    response = app.test_client().patch(
+        "/albums/1/share",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "email": "testa@a.co",
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_share_album_wrong_email():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}/share",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "email": "fake@example.com",
+        },
+    )
+
+    assert response.status_code == 404
+
+
+def test_share_album_not_found():
+    response = app.test_client().patch(
+        f"/albums/{'01' * 12}/share",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "email": "testa@a.co",
+        },
+    )
+
+    assert response.status_code == 404
+
+
+def test_share_album_already_shared():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().patch(
+        f"/albums/{album.get('_id')}/share",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+        json={
+            "email": "testa@a.co",
+        },
+    )
+
+    assert response.status_code == 400
+
+    album = db.client.albums.find_one({"_id": album.get("_id")})
+
+    assert ObjectId("663a200fcb14e8fe2fff0db8") in album.get("viewers_ids")
+
+
+def test_delete_album():
+    album = db.client.albums.find_one(
+        {"_owner_id": ObjectId("663a200fcb14e84e2fff0db8")}
+    )
+
+    response = app.test_client().delete(
+        f"/albums/{album.get('_id')}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+    )
+
+    assert response.status_code == 200
+
+    assert db.client.albums.find_one({"_id": album.get("_id")}) is None
+
+
+def test_delete_album_invalid_id():
+    response = app.test_client().delete(
+        "/albums/1",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+    )
+
+    assert response.status_code == 400
+
+
+def test_delete_album_not_found():
+    response = app.test_client().delete(
+        f"/albums/{'0' * 24}",
+        headers={
+            "Authorization": "Bearer " + token,
+        },
+    )
+
+    assert response.status_code == 404
+
+
+def test_delete_album_not_owner():
+    album = db.client.albums.insert_one(
+        {
+            "_owner_id": ObjectId("0" * 24),
+            "title": "test_album_fake_user",
+            "viewers_ids": [],
+            "pictures_ids": [],
+        }
+    )
+
+    response = app.test_client().delete(
+        f"/albums/{album.inserted_id}",
         headers={
             "Authorization": "Bearer " + token,
         },

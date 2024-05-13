@@ -7,7 +7,7 @@ from PIL import Image
 from middlewares import schema
 from middlewares.auth import isLogged
 from models import Picture
-from repositories import album_repository, picture_repository
+from repositories import album_repository, picture_repository, user_repository
 from schemas.albums import addPictureToAlbum, shareAlbum
 from utils.image import get_metadata
 
@@ -21,8 +21,6 @@ def add_picture_in_album(album_id: str):
 
     if not ObjectId.is_valid(album_id):
         abort(400, "Invalid album id")
-    if not ObjectId.is_valid(request.body.picture_id):
-        abort(400, "Invalid picture id")
 
     album_id = ObjectId(album_id)
     picture_id = ObjectId(request.body.picture_id)
@@ -84,7 +82,20 @@ def upload_picture_to_album(album_id: str):
 @isLogged
 @schema(shareAlbum)
 def share_album(album_id):
-    target_user_id = ObjectId(request.body.user)
+    if not ObjectId.is_valid(album_id) or not request.body:
+        abort(400, "Invalid picture id")
+
+    target_user = user_repository.getUserByEmail(request.body.email)
+    if not target_user:
+        abort(404, "User not found")
+
     album_id = ObjectId(album_id)
-    album = album_repository.share(album_id, target_user_id)
+    album = album_repository.getAlbum(album_id)
+    if not album:
+        abort(404, "Album not found")
+
+    if target_user.id in album.viewers_ids:
+        abort(400, "Album already shared with this user")
+
+    album = album_repository.share(album_id, target_user.id)
     return album
