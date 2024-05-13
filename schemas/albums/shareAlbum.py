@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field
 
-from utils.regex import isObjectId
+from utils.regex import isEmail
 
 
 class Request(BaseModel):
-    user: str = Field(pattern=isObjectId)
+    email: str = Field(pattern=isEmail)

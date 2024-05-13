@@ -1,8 +1,14 @@
 from datetime import datetime
 
+from flask import request
+from PIL import Image
 from PIL.ExifTags import GPSTAGS, TAGS
 from PIL.Image import Exif
 from PIL.Image import Image as ImageType
+from werkzeug.datastructures import FileStorage
+
+from models import Picture
+from repositories import picture_repository
 
 
 def _get_geotagging(exif: Exif):
@@ -60,3 +66,36 @@ def get_metadata(image: ImageType) -> dict:
     if lat and long:
         parsed["location"] = {"latitude": lat, "longitude": long}
     return parsed
+
+
+def compress_image(image: ImageType) -> ImageType:
+    if image.mode == "RGBA" or image.mode == "P":
+        if image.mode == "P":
+            image = image.convert("RGBA")
+
+        white_image = Image.new("RGBA", image.size, "WHITE")
+        white_image.paste(image, mask=image)
+        image = white_image.convert("RGB")
+    return image
+
+
+def handle_picture_upload(uploaded_file: FileStorage):
+    with Image.open(uploaded_file) as image:
+        filename = ".".join(uploaded_file.filename.split(".")[:-1])
+        metadata = get_metadata(image)
+        picture = Picture(
+            owner_id=request.req_user.id,
+            location=metadata.get("location", None),
+            date=metadata.get("date", datetime.now().isoformat()),
+            filename=filename,
+            mimetype="image/jpeg",
+        )
+        picture = picture_repository.insertPicture(picture)
+
+        image = compress_image(image)
+
+        image.save(f"uploads/{picture.id}", "JPEG", quality=50)
+        image.thumbnail((200, 200))
+        image.save(f"uploads/{picture.id}.low", "JPEG")
+
+        return picture
