@@ -3,7 +3,7 @@ import re
 import pytest
 from bson import ObjectId
 
-from utils import app, auth, db, regex
+from utils import app, auth, regex
 
 token = None
 
