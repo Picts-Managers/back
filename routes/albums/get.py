@@ -47,6 +47,7 @@ def get_album(album_id: str):
 
 @blueprint.get("/shared")
 @isLogged
+@schema(getAlbums)
 def get_shared_albums():
     albums = album_repository.getSharedAlbums(request.req_user.id)
     for album in albums:
